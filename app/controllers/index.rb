@@ -8,9 +8,9 @@ get '/allusers' do
   User.all.offset(params["since"]).to_json
 end
 
-get '/videomessages/:user_id/all' do
+get '/videomessages/:device_id/all' do
   content_type :json
-  User.find(params[:user_id]).all_messages(params["since"].to_i).to_json
+  User.find_by(device_id: params[:device_id]).all_messages(params["since"].to_i).to_json
 end
 
 post '/upload' do
@@ -42,6 +42,7 @@ end
 
 post "/newuser" do
   puts params
+
   User.create(devicetoken: params[:devicetoken], device_id: params[:deviceId], username: params[:username])
   notify(params[:deviceToken], "Welcome to Chainer!")
   "Hey There Cowboy"
