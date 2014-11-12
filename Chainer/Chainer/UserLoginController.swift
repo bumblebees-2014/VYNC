@@ -16,7 +16,7 @@ class UserLoginController: UIViewController,UINavigationControllerDelegate, UIIm
         
         var alert = UIAlertController(title: title, message: error, preferredStyle: UIAlertControllerStyle.Alert)
         alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: { action in
-            self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismissViewControllerAnimated(true, completion: nil)
         }))
         self.presentViewController(alert, animated: true, completion: nil)
     }
@@ -30,16 +30,16 @@ class UserLoginController: UIViewController,UINavigationControllerDelegate, UIIm
         activityIndicator.startAnimating()
         UIApplication.sharedApplication().beginIgnoringInteractionEvents()
         var deviceId = UIDevice.currentDevice().identifierForVendor.UUIDString
-        var devicetoken = currentUser.deviceToken!
+        var devicetoken = currentUser.deviceToken
         if usernameTxt.text == "" {
             displayAlert("Error In Form", error: "Please enter a username")
         } else {
-            
             var request = HTTPTask()
             let params: Dictionary<String,AnyObject!> = ["deviceId": deviceId, "username": usernameTxt.text, "devicetoken": devicetoken]
             request.POST("http://chainer.herokupapp.com/newuser", parameters: params, success: {(response: HTTPResponse) in
                 if response.responseObject != nil {
-                    print("success")
+                    println("success")
+                    self.theFileManager.createFileAtPath(pathToUserFile, contents: NSData(), attributes: nil )
                 }
                 } ,failure: {(error: NSError, response: HTTPResponse?) in
                     println("failure")
@@ -63,5 +63,6 @@ class UserLoginController: UIViewController,UINavigationControllerDelegate, UIIm
         if  theFileManager.fileExistsAtPath(pathToUserFile) {
             self.performSegueWithIdentifier("jumpToNewChains", sender: self)
         }
+    println(theFileManager.fileExistsAtPath(pathToUserFile))
     }
 }
