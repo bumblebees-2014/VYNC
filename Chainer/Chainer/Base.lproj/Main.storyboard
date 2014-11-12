@@ -146,7 +146,7 @@
                     </view>
                     <connections>
                         <outlet property="usernameTxt" destination="dZq-au-pWP" id="Cc2-eN-FAF"/>
-                        <segue destination="m6T-Yp-eQo" kind="push" identifier="jumpToNewChains" id="6S8-lY-sLb"/>
+                        <segue destination="m6T-Yp-eQo" kind="modal" identifier="jumpToNewChains" id="6S8-lY-sLb"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QLg-QU-cde" userLabel="First Responder" sceneMemberID="firstResponder"/>
