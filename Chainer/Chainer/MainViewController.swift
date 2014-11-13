@@ -62,13 +62,13 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         if editingStyle == UITableViewCellEditingStyle.Delete{
             println("Replying to:")
             replyToID = chains[indexPath.row].first!.replyToID as? Int
-            showCam()
+            showCam(nil)
         }
     }
     
     // Load the camera on top
     
-    @IBAction func showCam() {
+    @IBAction func showCam(sender: AnyObject?) {
         let imagePicker = UIImagePickerController() //inst
         imagePicker.delegate = self
         imagePicker.sourceType = UIImagePickerControllerSourceType.Camera // Set the media type to allow movies
