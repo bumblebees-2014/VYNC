@@ -27,7 +27,7 @@
         <!--View Controller-->
         <scene sceneID="4Q3-rA-yZ2">
             <objects>
-                <viewController storyboardIdentifier="Home" definesPresentationContext="YES" providesPresentationContextTransitionStyle="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="d19-Z0-Qnq" customClass="ViewController" customModule="Chainer" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Home" definesPresentationContext="YES" providesPresentationContextTransitionStyle="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="d19-Z0-Qnq" customClass="ViewController" customModule="Chainer" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="pas-Nl-aCd">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

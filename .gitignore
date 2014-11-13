@@ -3,3 +3,5 @@ Chainer/.DS_Store
 .DS_Store
 certificate.pem
 Chainer/Chainer.xcodeproj/project.xcworkspace/xcuserdata/apprentice.xcuserdatad/UserInterfaceState.xcuserstate
+Procfile
+procfile
