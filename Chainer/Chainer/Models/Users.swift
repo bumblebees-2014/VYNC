@@ -110,6 +110,20 @@ class UserManager {
         return nil
     }
     
+    func findByID(id: NSNumber) -> User? {
+        var req = NSFetchRequest(entityName: "User")
+        req.predicate = NSPredicate(format: "userID == %@", argumentArray: [userID])
+        req.fetchLimit = 1
+        var error: NSError?
+        if let db = self.db {
+            let results = db.executeFetchRequest(req, error: &error) as [User]
+            if results.count == 1 {
+                return results[0]
+            }
+        }
+        return nil
+    }
+    
 }
 
 
