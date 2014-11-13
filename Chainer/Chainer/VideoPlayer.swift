@@ -39,4 +39,3 @@ public func createAVItems(items : [String]) -> [AVPlayerItem]{
     }
     return avItems
 }
-
