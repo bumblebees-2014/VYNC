@@ -41,6 +41,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     override func viewWillAppear(animated: Bool) {
         onModelUpdate(videoMessageMgr)
         super.viewWillAppear(animated)
+        tblChains.reloadData()
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -87,22 +88,22 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 //            button.alpha = 0.2
 //            button.layer.cornerRadius = 156
             cell.addSubview(button)
-            cell.textLabel.text = "\(sendingUser!)"
+            cell.textLabel?.text = "\(sendingUser!)"
             cell.detailTextLabel?.text = "\(chains[indexPath.row].count) \(link) long. \(stringDate)"
-            cell.imageView.image = UIImage(contentsOfFile :"/Users/apprentice/Documents/thomas/chainer/Chainer/Chainer/Images.xcassets/envelope5.imageset/envelope5.png")
+            cell.imageView?.image = UIImage(contentsOfFile :"/Users/apprentice/Documents/thomas/chainer/Chainer/Chainer/Images.xcassets/envelope5.imageset/envelope5.png")
 
         } else if sentID == userID.toInt()! {
             // if you sent the message
             println("following chain")
-            cell.textLabel.text = "Following"
+            cell.textLabel?.text = "Following"
             cell.detailTextLabel?.text = "\(chains[indexPath.row].count) \(link) long. \(stringDate)"
-            cell.imageView.image = UIImage(contentsOfFile : "/Users/apprentice/Documents/thomas/chainer/Chainer/Chainer/group41.png")
+            cell.imageView?.image = UIImage(contentsOfFile : "/Users/apprentice/Documents/thomas/chainer/Chainer/Chainer/group41.png")
             println(UIImage(contentsOfFile : "/Users/apprentice/Documents/thomas/chainer/Chainer/Chainer/group41.png"))
         } else {                                                        // if you are just following
             println("chain you started")
-            cell.textLabel.text = "Following \(sendingUser!)"
+            cell.textLabel?.text = "Following \(sendingUser!)"
             cell.detailTextLabel?.text = "\(chains[indexPath.row].count) \(link) long. \(stringDate)"
-            cell.imageView.image = UIImage(contentsOfFile : "/Users/apprentice/Downloads/new.png")
+            cell.imageView?.image = UIImage(contentsOfFile : "/Users/apprentice/Downloads/new.png")
         }
         return cell
     }

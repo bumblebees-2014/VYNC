@@ -41,7 +41,7 @@ class ContactsViewController: UIViewController, UITableViewDelegate, UITableView
         } else {
             user = users[indexPath.row]
         }
-        cell.textLabel.text = "\(user.username)"
+        cell.textLabel?.text = "\(user.username)"
 
         return cell
     }
