@@ -36,12 +36,12 @@ class Syncer<T: NSManagedObject> {
     }
     
     // HTTP Functions
-    func sync(completion:(()->()) = {}) {
+    func sync(completion : (Void -> Void) = {}) {
         uploadNew()
-        downloadNew()
+        downloadNew(completion)
     }
     
-    func uploadNew(completion:(()->()) = {}){
+    func uploadNew(completion:(Void -> Void) = {}){
         // post the video that the user takes to the server
         let newObjs = all().filter("id == %@", args: 0).exec()!
         if newObjs.count == 0 {
@@ -90,7 +90,7 @@ class Syncer<T: NSManagedObject> {
         })
     }
     
-    func uploadWithFile(obj:T, completion: (()->()) = {}) {
+    func uploadWithFile(obj:T, completion: (Void -> Void) = {}) {
         let json = createJSONfromObject(obj)
         let video = obj as VideoMessage
         let videoURL = NSURL.fileURLWithPath(docFolderToSaveFiles + "/" + video.videoId!)!
@@ -154,7 +154,7 @@ class Syncer<T: NSManagedObject> {
         return names
     }
     
-    func downloadNew(completion:(()->()) = {}){
+    func downloadNew(completion:(Void -> Void) = {}){
         var since = 0
         if let newest = all().last {
             since = newest.valueForKey("id") as Int
