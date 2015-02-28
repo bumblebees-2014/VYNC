@@ -85,6 +85,7 @@ class VideoMessage: NSManagedObject {
                 println("back on the main thread")
                 completion()
             }
+
         }
     }
     

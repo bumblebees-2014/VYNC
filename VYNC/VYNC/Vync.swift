@@ -55,8 +55,6 @@ class Vync {
             let firstMessageUrl = NSURL.fileURLWithPath(docFolderToSaveFiles + "/" + firstMessage.videoId!) as NSURL!
             let firstItem = AVPlayerItem(URL: firstMessageUrl)
             let standinItem = AVPlayerItem(URL: standin)
-            let data = NSData(contentsOfURL: firstMessageUrl)
-            println(data?.bytes)
             return [firstItem, standinItem]
             
         } else {
