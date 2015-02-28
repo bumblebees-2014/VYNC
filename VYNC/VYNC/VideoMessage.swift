@@ -93,30 +93,30 @@ class VideoMessage: NSManagedObject {
         if vids.count == 0 {
             completion()
         }
-        for message in vids {
-            let localUrlString = "\(docFolderToSaveFiles)/\(message.videoId!)"
-            let localUrl = NSURL(fileURLWithPath: localUrlString) as NSURL!
-            let cloudUrl = NSURL(string: s3Url + message.videoId!) as NSURL!
-            let localData = NSData(contentsOfURL: localUrl)
-            if localData?.length == nil {
-                let priority = DISPATCH_QUEUE_PRIORITY_LOW
-                dispatch_async(dispatch_get_global_queue(priority, 0)) {
-                    println("saving video to core data \(message.id)")
+        let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
+        dispatch_async(dispatch_get_global_queue(priority, 0)) {
+            for message in vids {
+                let localUrlString = "\(docFolderToSaveFiles)/\(message.videoId!)"
+                let localUrl = NSURL(fileURLWithPath: localUrlString) as NSURL!
+                let localData = NSData(contentsOfURL: localUrl)
+                if localData?.length == nil {
+                    let cloudUrl = NSURL(string: s3Url + message.videoId!) as NSURL!
                     let data = NSData(contentsOfURL: cloudUrl)
                     data?.writeToFile(localUrlString, atomically: true)
+                    println("saved video \(message.id) to core data")
                     message.saved = 1
                     message.watched = 0
                     self.syncer.save()
-                    dispatch_async(dispatch_get_main_queue()) {
-                        // update some UI using completion callback
-                        println("back on the main thread")
-                        completion()
-                    }
+                } else {
+                    println("already there")
+                    message.saved = 1
+                    self.syncer.save()
                 }
-            } else {
-                println("already there")
-                message.saved = 1
-                self.syncer.save()
+            }
+            dispatch_async(dispatch_get_main_queue()) {
+                // update some UI using completion callback
+                println("back on the main thread")
+                completion()
             }
         }
     }

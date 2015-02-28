@@ -37,9 +37,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         } else {
             application.registerForRemoteNotifications()
-            VideoMessage.syncer.sync() {done in
-                VideoMessage.saveNewVids()
-            }
+            VideoMessage.syncer.sync()
+//            VideoMessage.saveNewVids()
             User.syncer.sync()
         }
 
@@ -76,9 +75,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
         println("Got notification")
-        VideoMessage.syncer.sync() {done in
-            VideoMessage.saveNewVids()
-        }
+        VideoMessage.syncer.sync()
+//        VideoMessage.saveNewVids()
         
     }
     
@@ -99,9 +97,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidBecomeActive(application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         application.applicationIconBadgeNumber = 0
-        VideoMessage.syncer.sync() {done in
-            VideoMessage.saveNewVids()
-        }
+        VideoMessage.syncer.sync()
+//        VideoMessage.saveNewVids()
     }
 
     func applicationWillTerminate(application: UIApplication) {

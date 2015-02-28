@@ -34,9 +34,7 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
         VideoMessage.syncer.uploadNew() {done in
             self.updateView()
             VideoMessage.syncer.downloadNew() {done in
-//                VideoMessage.saveNewVids() {done in
-                    self.updateView()
-//                }
+                self.updateView()
             }
         }
     }
@@ -85,10 +83,10 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
         self.refreshControl.beginRefreshing()
         VideoMessage.syncer.uploadNew() {done in
             VideoMessage.syncer.downloadNew() {done in
-//                VideoMessage.saveNewVids() {done in
+                VideoMessage.saveNewVids() {done in
                     self.updateView()
                     self.refreshControl.endRefreshing()
-//                }
+                }
             }
         }
         User.syncer.sync()
