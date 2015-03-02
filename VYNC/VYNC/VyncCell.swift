@@ -36,10 +36,10 @@ class VyncCell: UITableViewCell, UIGestureRecognizerDelegate {
         isWatchedLabel.text = "\u{e001}"
         // DIY Separators
         var frame = self.bounds
-        frame.origin.y = frame.size.height - 0.2
-        frame.size.height = 0.2
+        frame.origin.y = frame.size.height - 0.1
+        frame.size.height = 0.1
         let separatorView = UIView(frame: frame)
-        separatorView.backgroundColor = UIColor.darkGrayColor()
+        separatorView.backgroundColor = UIColor.lightGrayColor()
         separatorView.autoresizingMask = UIViewAutoresizing.FlexibleWidth|UIViewAutoresizing.FlexibleTopMargin
         self.contentView.addSubview(separatorView)
         
