@@ -116,19 +116,19 @@ class Vync {
 
     func title()->String {
         if self.messages.count != 0 {
-        if let video = messages.last as VideoMessage! {
-            if let title = video.title as String! {
-                if title == "" {
-                    return "N/A"
+            if let video = messages.last as VideoMessage! {
+                if let title = video.title as String! {
+                    if title == "" {
+                        return "N/A"
+                    } else if countElements(title) > 15 {
+                        return title[0...15]
+                    } else {
+                        return title
+                    }
                 }
-                return title
-            } else {
-                return "TODO"
             }
-        } else {
-            return "ToDo"
         }
-        } else {return "oops"}
+        return "oops"
     }
     
     func usersList()->String{
