@@ -28,7 +28,8 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.vyncTable.rowHeight = 70
+        self.vyncTable.rowHeight = UITableViewAutomaticDimension
+        self.vyncTable.estimatedRowHeight = 70
         setupButtons()
 
         VideoMessage.syncer.uploadNew() {done in
@@ -140,9 +141,9 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
             cell.contentView.layer.borderWidth = 0.0
             cell.lengthLabel.layer.borderWidth = 0.0
         }
-
         return cell
     }
+    
     
     func addGesturesToCell(cell:UITableViewCell){
         // long touch for playback
@@ -244,48 +245,21 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
     func doubleTapCell(sender:UITapGestureRecognizer){
         let indexPath:NSIndexPath = self.vyncTable.indexPathForRowAtPoint(sender.view!.center)!
         if let cell = vyncTable.cellForRowAtIndexPath(indexPath) as? VyncCell {
-            if cell.isFlipped {
-                let view = self.view.viewWithTag(19)
-                cell.isFlipped = false
-                UIView.transitionFromView(
-                    view!,
-                    toView: cell.contentView,
-                    duration: 0.66,
-                    options: UIViewAnimationOptions.TransitionFlipFromBottom,
-                    completion: nil
-                )
-            } else {
-                let viewHeight = Int(cell.frame.height)
-                let viewWidth = Int(cell.frame.width)
-                let view = UIView(frame:CGRect(x: 0, y: 0, width: viewWidth, height: viewHeight))
-                let label = UILabel()
-                label.frame = view.frame
-                if vyncs[indexPath.row].waitingOnYou {
-                    label.text = " Forward to see who is on this VYNC"
-                    
-                } else {
-                    let labelText = ", ".join(vyncs[indexPath.row].usersList())
-                    label.text = " Users: \(labelText)"
-
-                }
-
-                view.addSubview(label)
-                view.tag = 19
+            if cell.isFlipped == false {
+//                let view = self.view.viewWithTag(19)
                 cell.isFlipped = true
-                UIView.transitionFromView(
-                    cell.contentView,
-                    toView: view,
-                    duration: 0.66,
-                    options: UIViewAnimationOptions.TransitionFlipFromTop,
-                    completion: {
-                        finished in
-                        // Auto flip back after 4 seconds
-                        delay(4){
-                            if cell.isFlipped {
-                                self.doubleTapCell(sender)
-                            }
-                        }
-                    })
+                
+                cell.titleLabel.text = "Users on this vync:\n" + vyncs[indexPath.row].usersList()
+                UIView.setAnimationsEnabled(false)
+                vyncTable.beginUpdates()
+                vyncTable.endUpdates()
+                UIView.setAnimationsEnabled(true)
+
+            } else {
+                cell.titleLabel.text = vyncs[indexPath.row].title()
+                cell.isFlipped = false
+                vyncTable.beginUpdates()
+                vyncTable.endUpdates()
             }
         }
     }

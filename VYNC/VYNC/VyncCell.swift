@@ -29,7 +29,15 @@ class VyncCell: UITableViewCell, UIGestureRecognizerDelegate {
         lengthLabel.layer.masksToBounds = true
         let corner = lengthLabel.layer.frame.width / 2
         lengthLabel.layer.cornerRadius = corner
+
         
+        if self.contentView.frame.height < 70 {
+            self.contentView.frame.size = CGSize(width: self.frame.size.width, height: 70)
+            self.setNeedsDisplay()
+            println(self.frame.height)
+            println(self.bounds.height)
+            println(self.contentView.frame.height)
+        }
         isWatchedLabel.text = "\u{e001}"
     }
     

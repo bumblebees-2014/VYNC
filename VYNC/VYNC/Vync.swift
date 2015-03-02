@@ -11,6 +11,8 @@ import CoreData
 import AVFoundation
 
 class Vync {
+    var flipped = false
+    
     var messages : [VideoMessage]
     var notUploaded: Bool {
         get {
@@ -116,6 +118,9 @@ class Vync {
         if self.messages.count != 0 {
         if let video = messages.last as VideoMessage! {
             if let title = video.title as String! {
+                if title == "" {
+                    return "N/A"
+                }
                 return title
             } else {
                 return "TODO"
@@ -126,11 +131,12 @@ class Vync {
         } else {return "oops"}
     }
     
-    func usersList()->[String]{
-        return self.messages.map({
+    func usersList()->String{
+        let userNames = self.messages.map({
             message in
-            self.findUsername(message.senderId as Int)
+            "\(self.findUsername(message.senderId as Int))"
         })
+        return ("\n").join(userNames)
     }
     
     func findUsername(userId:Int)->String{
