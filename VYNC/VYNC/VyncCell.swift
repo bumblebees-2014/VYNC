@@ -18,6 +18,8 @@ class VyncCell: UITableViewCell, UIGestureRecognizerDelegate {
     @IBOutlet weak var isWatchedLabel: UILabel!
     @IBOutlet weak var saving: UIActivityIndicatorView!
     
+    weak var table : UITableView!
+    
     var isMoving = false
     var isFlipped = false
 
@@ -26,19 +28,21 @@ class VyncCell: UITableViewCell, UIGestureRecognizerDelegate {
         super.awakeFromNib()
         // Initialization code
         self.selectionStyle = UITableViewCellSelectionStyle.None
+        
         lengthLabel.layer.masksToBounds = true
         let corner = lengthLabel.layer.frame.width / 2
         lengthLabel.layer.cornerRadius = corner
-
         
-        if self.contentView.frame.height < 70 {
-            self.contentView.frame.size = CGSize(width: self.frame.size.width, height: 70)
-            self.setNeedsDisplay()
-            println(self.frame.height)
-            println(self.bounds.height)
-            println(self.contentView.frame.height)
-        }
         isWatchedLabel.text = "\u{e001}"
+        // DIY Separators
+        var frame = self.bounds
+        frame.origin.y = frame.size.height - 0.2
+        frame.size.height = 0.2
+        let separatorView = UIView(frame: frame)
+        separatorView.backgroundColor = UIColor.darkGrayColor()
+        separatorView.autoresizingMask = UIViewAutoresizing.FlexibleWidth|UIViewAutoresizing.FlexibleTopMargin
+        self.contentView.addSubview(separatorView)
+        
     }
     
     func selectCellAnimation() {

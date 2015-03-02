@@ -15,23 +15,24 @@ import AVFoundation
 class VyncListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UINavigationControllerDelegate {
 
     @IBOutlet var vyncTable: UITableView!
-    var refreshControl:UIRefreshControl!
-    
-//    Setting this equal to a global variable that is an array of vyncs. This will later be replaced by a function return from a dB query.
-    var vyncs = VideoMessage.asVyncs()
-    var lastPlayed : Int? = nil
-    
-    var videoLayer = VyncPlayerLayer()
-
     @IBOutlet weak var showStatsButton: UIBarButtonItem!
     @IBOutlet weak var cameraButton: UIBarButtonItem!
     
+    var refreshControl:UIRefreshControl!
+    var vyncs = VideoMessage.asVyncs()
+    var lastPlayed : Int? = nil
+    var videoLayer = VyncPlayerLayer()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        // Set vyncTable attributes
+        self.vyncTable.separatorStyle = UITableViewCellSeparatorStyle.None
         self.vyncTable.rowHeight = UITableViewAutomaticDimension
         self.vyncTable.estimatedRowHeight = 70
+        
         setupButtons()
-
+        
+        // Sync New Videos
         VideoMessage.syncer.uploadNew() {done in
             self.updateView()
             VideoMessage.syncer.downloadNew() {done in
@@ -71,13 +72,7 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
         // Dispose of any resources that can be recreated.
     }
     
-    override func shouldAutorotate() -> Bool {
-        return false
-    }
-    
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return vyncs.count
-    }
+    // ACTIONS
     
     @IBAction func reloadVyncs() {
         println("refresh \(VideoMessage.syncer.all().exec()!.count)")
@@ -99,9 +94,27 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
         self.vyncTable.setNeedsDisplay()
     }
     
-    // Set the properties of cells
+    func reply(index:Int){
+        let camera = self.storyboard?.instantiateViewControllerWithIdentifier("Camera") as VyncCameraViewController
+        camera.vync = vyncs[index]
+        self.presentViewController(camera, animated: false, completion: nil)
+    }
+    
+    @IBAction func showCam() {
+        let camera = self.storyboard?.instantiateViewControllerWithIdentifier("Camera") as VyncCameraViewController
+        self.presentViewController(camera, animated: false, completion: nil)
+    }
+    
+    // CELL PROPERTIES
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return vyncs.count
+    }
+    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("VyncCell", forIndexPath: indexPath) as VyncCell
+        // Set table as a reference
+        cell.table = vyncTable
+        
         addGesturesToCell(cell)
        //        Set Title and Length Labels
         let date = vyncs[indexPath.row].mostRecent()
@@ -111,7 +124,6 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
         // New vyncs get special color and gesture
         if vyncs[indexPath.row].waitingOnYou {
             cell.statusLogo.textColor = UIColor(netHex:0xFFB5C9)
-//            cell.lengthLabel.text = "?"
             cell.lengthLabel.backgroundColor = UIColor(netHex:0xFFB5C9)
             cell.subTitle.text = "\(date) - Swipe to Reply"
         } else {
@@ -144,25 +156,8 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
         return cell
     }
     
+    // SWIPE TO FORWARD FEATURE
     
-    func addGesturesToCell(cell:UITableViewCell){
-        // long touch for playback
-        let longTouch = UILongPressGestureRecognizer()
-        longTouch.minimumPressDuration = 0.3
-        longTouch.addTarget(self, action: "holdToPlayVideos:")
-        cell.addGestureRecognizer(longTouch)
-        
-        let singleTap = UITapGestureRecognizer(target: self, action: "singleTapCell:")
-        singleTap.numberOfTapsRequired = 1
-        
-        let doubleTap = UITapGestureRecognizer(target:self, action: "doubleTapCell:")
-        doubleTap.numberOfTapsRequired = 2
-        
-        cell.addGestureRecognizer(singleTap)
-        cell.addGestureRecognizer(doubleTap)
-        singleTap.requireGestureRecognizerToFail(doubleTap)
-    }
-
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         if vyncs[indexPath.row].waitingOnYou {
             return true
@@ -187,10 +182,31 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
             style: UITableViewRowActionStyle.Normal,
             title: "FORWARD",
             handler: replyClosure
-            )
+        )
         reply.backgroundColor = UIColor(netHex: 0xFFB5C9)
         return [reply]
     }
+    
+    // CELL GESTURES
+    
+    func addGesturesToCell(cell:UITableViewCell){
+        // long touch for playback
+        let longTouch = UILongPressGestureRecognizer()
+        longTouch.minimumPressDuration = 0.3
+        longTouch.addTarget(self, action: "holdToPlayVideos:")
+        cell.addGestureRecognizer(longTouch)
+        
+        let singleTap = UITapGestureRecognizer(target: self, action: "singleTapCell:")
+        singleTap.numberOfTapsRequired = 1
+        
+        let doubleTap = UITapGestureRecognizer(target:self, action: "doubleTapCell:")
+        doubleTap.numberOfTapsRequired = 2
+        
+        cell.addGestureRecognizer(singleTap)
+        cell.addGestureRecognizer(doubleTap)
+        singleTap.requireGestureRecognizerToFail(doubleTap)
+    }
+
     
     
     @IBAction func holdToPlayVideos(sender: UILongPressGestureRecognizer) {
@@ -236,7 +252,9 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
                 }
             } else {
                 println("saved")
-                cell.selectCellAnimation()
+                if !cell.isFlipped {
+                    cell.selectCellAnimation()
+                }
             }
         }
 
@@ -246,15 +264,14 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
         let indexPath:NSIndexPath = self.vyncTable.indexPathForRowAtPoint(sender.view!.center)!
         if let cell = vyncTable.cellForRowAtIndexPath(indexPath) as? VyncCell {
             if cell.isFlipped == false {
-//                let view = self.view.viewWithTag(19)
+
                 cell.isFlipped = true
-                
+                // In case it was single tapped before
+                cell.subTitle.textColor = UIColor.clearColor()
+                cell.titleLabel.transform = CGAffineTransformMakeTranslation(0, 0)
                 cell.titleLabel.text = "Users on this vync:\n" + vyncs[indexPath.row].usersList()
-                UIView.setAnimationsEnabled(false)
                 vyncTable.beginUpdates()
                 vyncTable.endUpdates()
-                UIView.setAnimationsEnabled(true)
-
             } else {
                 cell.titleLabel.text = vyncs[indexPath.row].title()
                 cell.isFlipped = false
@@ -262,17 +279,6 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
                 vyncTable.endUpdates()
             }
         }
-    }
-
-    func reply(index:Int){
-        let camera = self.storyboard?.instantiateViewControllerWithIdentifier("Camera") as VyncCameraViewController
-        camera.vync = vyncs[index]
-        self.presentViewController(camera, animated: false, completion: nil)
-    }
-
-    @IBAction func showCam() {
-        let camera = self.storyboard?.instantiateViewControllerWithIdentifier("Camera") as VyncCameraViewController
-        self.presentViewController(camera, animated: false, completion: nil)
     }
     
 }
