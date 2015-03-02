@@ -12,8 +12,8 @@ import AVFoundation
 import UIKit
 
 protocol VyncCameraPlaybackLayerDelegate {
-    func acceptVideo(layer:VyncCameraPlaybackLayer)
-    func retakeVideo(layer:VyncCameraPlaybackLayer)
+    func acceptVideo()
+    func retakeVideo()
 }
 
 class VyncCameraPlaybackLayer: UIView {
@@ -23,11 +23,11 @@ class VyncCameraPlaybackLayer: UIView {
     let playerLayer = AVPlayerLayer()
     
     @IBAction func acceptVideo(sender: AnyObject) {
-        playbackDelegate!.acceptVideo(self)
+        playbackDelegate!.acceptVideo()
     }
     
     @IBAction func retakeVideo(sender: AnyObject) {
-        playbackDelegate!.retakeVideo(self)
+        playbackDelegate!.retakeVideo()
     }
     
     required init(coder aDecoder: NSCoder) {

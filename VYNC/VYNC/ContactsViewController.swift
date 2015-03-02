@@ -20,9 +20,6 @@ class ContactsViewController: UIViewController, UITableViewDelegate, UITableView
     @IBOutlet weak var searchBar: UISearchBar!
     
     override func viewDidLoad() {
-        for user in contacts {
-            println("User\(user.id)\n \(user.username)\n")
-        }
         super.viewDidLoad()
         contactsList.reloadData()
         contactsList.setNeedsDisplay()

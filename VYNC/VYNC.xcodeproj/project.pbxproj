@@ -38,7 +38,6 @@
 		48A4DE7A1A7A600C000087A2 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A4DE791A7A600C000087A2 /* User.swift */; };
 		48BAECD91A782897005CC762 /* VyncCameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BAECD81A782897005CC762 /* VyncCameraViewController.swift */; };
 		48BAECDD1A7829F8005CC762 /* VyncCameraPlaybackLayer.xib in Resources */ = {isa = PBXBuildFile; fileRef = 48BAECDC1A7829F8005CC762 /* VyncCameraPlaybackLayer.xib */; };
-		48CBB63C1A76A76C004A6E6D /* TitleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48CBB63B1A76A76C004A6E6D /* TitleViewController.swift */; };
 		48CE912E1A9F7312004B6271 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48CE912C1A9F7312004B6271 /* Crashlytics.framework */; };
 		48CE912F1A9F7312004B6271 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48CE912D1A9F7312004B6271 /* Fabric.framework */; };
 		48CE91471AA10DEA004B6271 /* LandingScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = 48CE91461AA10DEA004B6271 /* LandingScreen.png */; };
@@ -101,7 +100,6 @@
 		48A4DE791A7A600C000087A2 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		48BAECD81A782897005CC762 /* VyncCameraViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VyncCameraViewController.swift; sourceTree = "<group>"; };
 		48BAECDC1A7829F8005CC762 /* VyncCameraPlaybackLayer.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VyncCameraPlaybackLayer.xib; sourceTree = "<group>"; };
-		48CBB63B1A76A76C004A6E6D /* TitleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleViewController.swift; sourceTree = "<group>"; };
 		48CE912C1A9F7312004B6271 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		48CE912D1A9F7312004B6271 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		48CE91461AA10DEA004B6271 /* LandingScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LandingScreen.png; sourceTree = "<group>"; };
@@ -158,9 +156,10 @@
 			children = (
 				4875B31F1A6C79B50030AABD /* VyncListViewController.swift */,
 				481AF25A1A706B5F0018B887 /* VyncCell.swift */,
+				48F119391A784CCD00A02828 /* QueueLoopVideoPlayer.swift */,
 				483663981A75A80E0096AE64 /* ContactsViewController.swift */,
-				48CBB63B1A76A76C004A6E6D /* TitleViewController.swift */,
 				48BAECD81A782897005CC762 /* VyncCameraViewController.swift */,
+				48F1193B1A78605D00A02828 /* PlaybackOverlay.swift */,
 				4846BCC21A810DA200FC489C /* LoginViewController.swift */,
 				489105F91A9B726F00DDA009 /* LoginPageViewController.swift */,
 				489A9A051A8CFBA000902CC9 /* MyStatsViewController.swift */,
@@ -171,10 +170,8 @@
 		4836638F1A7535E40096AE64 /* Views_And_Layers */ = {
 			isa = PBXGroup;
 			children = (
-				48F1193B1A78605D00A02828 /* PlaybackOverlay.swift */,
 				4875B3031A6C79760030AABD /* Main.storyboard */,
 				48BAECDC1A7829F8005CC762 /* VyncCameraPlaybackLayer.xib */,
-				48F119391A784CCD00A02828 /* QueueLoopVideoPlayer.swift */,
 			);
 			name = Views_And_Layers;
 			sourceTree = "<group>";
@@ -432,7 +429,6 @@
 				4875B3201A6C79B50030AABD /* VyncListViewController.swift in Sources */,
 				483663991A75A80E0096AE64 /* ContactsViewController.swift in Sources */,
 				481AF25B1A706B5F0018B887 /* VyncCell.swift in Sources */,
-				48CBB63C1A76A76C004A6E6D /* TitleViewController.swift in Sources */,
 				48A4DE7A1A7A600C000087A2 /* User.swift in Sources */,
 				48E9F78A1A7961050034CF5E /* HTTPTask.swift in Sources */,
 				48E9F7881A7960F80034CF5E /* HTTPResponseSerializer.swift in Sources */,
