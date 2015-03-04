@@ -15,8 +15,16 @@ public func getName(classType:AnyClass) -> String {
     return arr.last!
 }
 
+public func delay(delay:Double, closure:()->()) {
+    dispatch_after(
+        dispatch_time(
+            DISPATCH_TIME_NOW,
+            Int64(delay * Double(NSEC_PER_SEC))
+        ),
+        dispatch_get_main_queue(), closure)
+}
+
 extension UIView {
-    
     
     class func loadFromNib() -> UIView? {
         return self.loadFromNib(named: getName(self))
@@ -34,15 +42,6 @@ extension UIView {
     
 }
 
-public func delay(delay:Double, closure:()->()) {
-    dispatch_after(
-        dispatch_time(
-            DISPATCH_TIME_NOW,
-            Int64(delay * Double(NSEC_PER_SEC))
-        ),
-        dispatch_get_main_queue(), closure)
-}
-
 
 //  Note: getting to a particular index may take O(n) time, which means a loop that uses a subscript can be O(n^2)
 extension String {
@@ -53,5 +52,30 @@ extension String {
             
             return self[Range(start: startIndex, end: endIndex)]
         }
+    }
+}
+
+extension String {
+    func camelToSnake()->String{
+        // I would love to do this whole thing functionally, but swift's map is broken with characters
+        var arr = map(self) { String($0) }
+        var str = ""
+        for letter in arr {
+            if letter == letter.capitalizedString {
+                str += "_\(letter.lowercaseString)"
+            } else
+            {
+                str += letter
+            }
+        }
+        return str
+    }
+    
+    func snakeToCamel()->String{
+        var splitString = self.componentsSeparatedByString("_")
+        var firstString = splitString.removeAtIndex(0)
+        var capitalizedString = splitString.map({string in string.uppercaseString})
+        capitalizedString.insert(firstString, atIndex: 0)
+        return "".join(capitalizedString)
     }
 }
