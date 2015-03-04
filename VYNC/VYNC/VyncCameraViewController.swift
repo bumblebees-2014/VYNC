@@ -45,6 +45,11 @@ class VyncCameraViewController: UIViewController, AVCaptureFileOutputRecordingDe
         }
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: .Fade)
+    }
+    
     func setupCamera(){
         let devices = AVCaptureDevice.devices()
         // Loop through all the capture devices on this phone
@@ -70,10 +75,7 @@ class VyncCameraViewController: UIViewController, AVCaptureFileOutputRecordingDe
     override func shouldAutorotate() -> Bool {
         return false
     }
-    
-    override func prefersStatusBarHidden() -> Bool {
-        return true
-    }
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

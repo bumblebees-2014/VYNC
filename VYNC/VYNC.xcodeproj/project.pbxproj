@@ -39,6 +39,8 @@
 		48BAECD91A782897005CC762 /* VyncCameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BAECD81A782897005CC762 /* VyncCameraViewController.swift */; };
 		48BAECDD1A7829F8005CC762 /* VyncCameraPlaybackLayer.xib in Resources */ = {isa = PBXBuildFile; fileRef = 48BAECDC1A7829F8005CC762 /* VyncCameraPlaybackLayer.xib */; };
 		48CBB63C1A76A76C004A6E6D /* TitleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48CBB63B1A76A76C004A6E6D /* TitleViewController.swift */; };
+		48CE912E1A9F7312004B6271 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48CE912C1A9F7312004B6271 /* Crashlytics.framework */; };
+		48CE912F1A9F7312004B6271 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48CE912D1A9F7312004B6271 /* Fabric.framework */; };
 		48CEDE201A7BC3AD0015997D /* GlobalVars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48CEDE1F1A7BC3AD0015997D /* GlobalVars.swift */; };
 		48CEDE221A7BC4E00015997D /* VideoMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48CEDE211A7BC4E00015997D /* VideoMessage.swift */; };
 		48E9F7861A7960EB0034CF5E /* HTTPRequestSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E9F7851A7960EB0034CF5E /* HTTPRequestSerializer.swift */; };
@@ -99,6 +101,8 @@
 		48BAECD81A782897005CC762 /* VyncCameraViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VyncCameraViewController.swift; sourceTree = "<group>"; };
 		48BAECDC1A7829F8005CC762 /* VyncCameraPlaybackLayer.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VyncCameraPlaybackLayer.xib; sourceTree = "<group>"; };
 		48CBB63B1A76A76C004A6E6D /* TitleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleViewController.swift; sourceTree = "<group>"; };
+		48CE912C1A9F7312004B6271 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
+		48CE912D1A9F7312004B6271 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		48CEDE1F1A7BC3AD0015997D /* GlobalVars.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalVars.swift; sourceTree = "<group>"; };
 		48CEDE211A7BC4E00015997D /* VideoMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoMessage.swift; sourceTree = "<group>"; };
 		48E9F7851A7960EB0034CF5E /* HTTPRequestSerializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPRequestSerializer.swift; sourceTree = "<group>"; };
@@ -118,7 +122,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				48CE912E1A9F7312004B6271 /* Crashlytics.framework in Frameworks */,
 				976D457F1A8129A200E6606F /* FacebookSDK.framework in Frameworks */,
+				48CE912F1A9F7312004B6271 /* Fabric.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -175,6 +181,8 @@
 			isa = PBXGroup;
 			children = (
 				4808922D1A79A1240050F230 /* VYNC.xcdatamodeld */,
+				48CE912C1A9F7312004B6271 /* Crashlytics.framework */,
+				48CE912D1A9F7312004B6271 /* Fabric.framework */,
 				4875B2F91A6C79760030AABD /* VYNC */,
 				4875B3121A6C79760030AABD /* VYNCTests */,
 				4875B2F81A6C79760030AABD /* Products */,
@@ -292,6 +300,7 @@
 				4875B2F31A6C79760030AABD /* Sources */,
 				4875B2F41A6C79760030AABD /* Frameworks */,
 				4875B2F51A6C79760030AABD /* Resources */,
+				48CE912B1A9F72C6004B6271 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -389,6 +398,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		48CE912B1A9F72C6004B6271 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Fabric.framework/run 95cb876a0cdb6a1d5592f0c9d14c9bb26bafc61b 2415b6231cf534e45b8a6c382d0bc57690552469cb3c303774c95f5132e1e387";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		4875B2F31A6C79760030AABD /* Sources */ = {

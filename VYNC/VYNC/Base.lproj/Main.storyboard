@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="hqV-3T-Vx2">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="VOQ-KP-4gu">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
@@ -270,11 +270,17 @@
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="ZAs-rA-S8k">
+                                            <rect key="frame" x="14" y="17" width="37" height="37"/>
+                                            <color key="color" red="0.45098039220000002" green="0.63137254899999995" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </activityIndicatorView>
                                     </subviews>
                                     <constraints>
+                                        <constraint firstAttribute="bottomMargin" secondItem="ZAs-rA-S8k" secondAttribute="bottom" constant="7" id="4o4-DB-Bbi"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="toH-CE-L9m" secondAttribute="bottom" constant="14" id="6S3-73-j5M"/>
                                         <constraint firstItem="1x2-hc-hve" firstAttribute="centerY" secondItem="3Dj-IK-wYU" secondAttribute="centerY" id="8JN-Fv-Fpr"/>
                                         <constraint firstItem="toH-CE-L9m" firstAttribute="leading" secondItem="KL1-fm-e1h" secondAttribute="trailing" constant="3" id="9QA-fk-LHp"/>
+                                        <constraint firstItem="ZAs-rA-S8k" firstAttribute="top" secondItem="3Dj-IK-wYU" secondAttribute="topMargin" constant="9" id="APy-C3-s2m"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="toH-CE-L9m" secondAttribute="trailing" constant="17" id="C0D-Wp-kUY"/>
                                         <constraint firstItem="ALx-2x-yua" firstAttribute="bottom" secondItem="KBi-R6-8Fo" secondAttribute="bottom" id="D6Q-ab-rhZ"/>
                                         <constraint firstItem="ALx-2x-yua" firstAttribute="top" secondItem="3Dj-IK-wYU" secondAttribute="topMargin" constant="28" id="EYv-78-uhP"/>
@@ -288,6 +294,8 @@
                                         <constraint firstItem="KL1-fm-e1h" firstAttribute="top" secondItem="3Dj-IK-wYU" secondAttribute="topMargin" constant="12" id="odo-sQ-bVx"/>
                                         <constraint firstItem="KL1-fm-e1h" firstAttribute="leading" secondItem="KBi-R6-8Fo" secondAttribute="trailing" constant="4" id="p3Y-eV-mNm"/>
                                         <constraint firstItem="1x2-hc-hve" firstAttribute="leading" secondItem="KL1-fm-e1h" secondAttribute="trailing" constant="16" id="pb6-Pb-y3z"/>
+                                        <constraint firstItem="KL1-fm-e1h" firstAttribute="leading" secondItem="ZAs-rA-S8k" secondAttribute="trailing" constant="12" id="s9X-qg-x9K"/>
+                                        <constraint firstItem="ZAs-rA-S8k" firstAttribute="leading" secondItem="3Dj-IK-wYU" secondAttribute="leadingMargin" constant="6" id="tLq-Q7-oCN"/>
                                         <constraint firstItem="toH-CE-L9m" firstAttribute="top" secondItem="3Dj-IK-wYU" secondAttribute="topMargin" constant="-1" id="ucH-kD-pij"/>
                                         <constraint firstItem="KL1-fm-e1h" firstAttribute="leading" secondItem="ALx-2x-yua" secondAttribute="leading" id="ypT-rz-GvO"/>
                                     </constraints>
@@ -295,6 +303,7 @@
                                 <connections>
                                     <outlet property="isWatchedLabel" destination="toH-CE-L9m" id="Cah-QF-2wD"/>
                                     <outlet property="lengthLabel" destination="1x2-hc-hve" id="qtv-oj-wnH"/>
+                                    <outlet property="saving" destination="ZAs-rA-S8k" id="3ez-zr-Iri"/>
                                     <outlet property="statusLogo" destination="KBi-R6-8Fo" id="GoZ-xK-8m2"/>
                                     <outlet property="subTitle" destination="ALx-2x-yua" id="g4s-RR-BYG"/>
                                     <outlet property="titleLabel" destination="KL1-fm-e1h" id="y37-A9-G4a"/>

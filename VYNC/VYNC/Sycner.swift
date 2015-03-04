@@ -118,6 +118,9 @@ class Syncer<T: NSManagedObject> {
                         completion()
                     } else {
                         println("API error ",str)
+                        self.delete(video)
+                        self.save()
+                        completion()
                     }
                 }
             },failure: {(error: NSError, response: HTTPResponse?) in
@@ -210,7 +213,10 @@ class Syncer<T: NSManagedObject> {
 
     func save(){
         db!.save(nil)
-        
+    }
+    
+    func delete(object: NSManagedObject){
+        db!.deleteObject(object)
     }
     
     func camelToSnake(attribute:String)->String{

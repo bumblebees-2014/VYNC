@@ -50,8 +50,6 @@ class LoginViewController : UIViewController, FBLoginViewDelegate {
             var settings: UIUserNotificationSettings = UIUserNotificationSettings( forTypes: types, categories: nil )
             UIApplication.sharedApplication().registerUserNotificationSettings(settings)
             UIApplication.sharedApplication().registerForRemoteNotifications()
-
-        
         })
     }
     
@@ -70,7 +68,9 @@ class LoginViewController : UIViewController, FBLoginViewDelegate {
                 newUser.isMe = 1
                 newUser.email = email
                 User.syncer.save()
-                User.syncer.sync()
+                User.syncer.sync() {done in
+                    VideoMessage.syncer.downloadNew()
+                }
             }
         }
     }

@@ -16,6 +16,7 @@ class VyncCell: UITableViewCell, UIGestureRecognizerDelegate {
     @IBOutlet weak var statusLogo: UILabel!
     @IBOutlet weak var subTitle: UILabel!
     @IBOutlet weak var isWatchedLabel: UILabel!
+    @IBOutlet weak var saving: UIActivityIndicatorView!
     
     var isMoving = false
     var isFlipped = false

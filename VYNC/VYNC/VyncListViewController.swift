@@ -19,8 +19,9 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
     
 //    Setting this equal to a global variable that is an array of vyncs. This will later be replaced by a function return from a dB query.
     var vyncs = VideoMessage.asVyncs()
-    var videoPlayer : QueueLoopVideoPlayer?
     var lastPlayed : Int? = nil
+    
+    var videoLayer = VyncPlayerLayer()
 
     @IBOutlet weak var showStatsButton: UIBarButtonItem!
     @IBOutlet weak var cameraButton: UIBarButtonItem!
@@ -33,9 +34,9 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
         VideoMessage.syncer.uploadNew() {done in
             self.updateView()
             VideoMessage.syncer.downloadNew() {done in
-                VideoMessage.saveNewVids() {done in
+//                VideoMessage.saveNewVids() {done in
                     self.updateView()
-                }
+//                }
             }
         }
     }
@@ -62,6 +63,8 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: .None)
+        updateView()
     }
     
     override func didReceiveMemoryWarning() {
@@ -78,13 +81,14 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     @IBAction func reloadVyncs() {
+        println("refresh \(VideoMessage.syncer.all().exec()!.count)")
         self.refreshControl.beginRefreshing()
         VideoMessage.syncer.uploadNew() {done in
             VideoMessage.syncer.downloadNew() {done in
-                VideoMessage.saveNewVids() {done in
+//                VideoMessage.saveNewVids() {done in
                     self.updateView()
                     self.refreshControl.endRefreshing()
-                }
+//                }
             }
         }
         User.syncer.sync()
@@ -108,7 +112,7 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
         // New vyncs get special color and gesture
         if vyncs[indexPath.row].waitingOnYou {
             cell.statusLogo.textColor = UIColor(netHex:0xFFB5C9)
-            cell.lengthLabel.text = "?"
+//            cell.lengthLabel.text = "?"
             cell.lengthLabel.backgroundColor = UIColor(netHex:0xFFB5C9)
             cell.subTitle.text = "\(date) - Swipe to Reply"
         } else {
@@ -130,10 +134,10 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
             cell.lengthLabel.layer.borderWidth = 2.0
             cell.lengthLabel.layer.borderColor = UIColor.redColor().CGColor
         } else if vyncs[indexPath.row].isSaved == false {
-            cell.contentView.layer.borderWidth = 0.5
-            cell.contentView.layer.borderColor = UIColor.orangeColor().CGColor
-            cell.lengthLabel.layer.borderWidth = 2.0
-            cell.lengthLabel.layer.borderColor = UIColor.orangeColor().CGColor
+            cell.statusLogo.textColor = UIColor.orangeColor()
+            cell.subTitle.textColor = UIColor.orangeColor()
+            cell.titleLabel.transform = CGAffineTransformMakeTranslation(0, -10)
+            cell.subTitle.text = "Tap to download"
         } else {
             cell.contentView.layer.borderWidth = 0.0
             cell.lengthLabel.layer.borderWidth = 0.0
@@ -145,6 +149,7 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
     func addGesturesToCell(cell:UITableViewCell){
         // long touch for playback
         let longTouch = UILongPressGestureRecognizer()
+        longTouch.minimumPressDuration = 0.3
         longTouch.addTarget(self, action: "holdToPlayVideos:")
         cell.addGestureRecognizer(longTouch)
         
@@ -172,7 +177,6 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        
     }
     
     func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
@@ -191,58 +195,49 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
     
     
     @IBAction func holdToPlayVideos(sender: UILongPressGestureRecognizer) {
-        println(self.view)
         if sender.state == .Began {
-            println("htpv called with .Began")
             if let index = self.vyncTable.indexPathForRowAtPoint(sender.view!.center)?.row as Int! {
                 if vyncs[index].isSaved {
-                    if index == self.lastPlayed {
-                        self.videoPlayer?.continuePlay()
-                        self.videoPlayer!.view.addGestureRecognizer(sender)
-                        if self.presentedViewController == nil {
-                            self.presentViewController(self.videoPlayer!, animated: false, completion:nil)
-                        }
-                    } else {
-                        self.videoPlayer?.view.removeGestureRecognizer(sender)
-                        self.videoPlayer?.player = nil
-                        self.videoPlayer = nil
+                    if index != self.lastPlayed {
+                        self.videoLayer.player = nil
+                        let items = vyncs[index].videoItems()
+                        var loopPlayer = AVQueueLoopPlayer(items: items)
+                        self.videoLayer.player = loopPlayer
+                        // In order to communicate the information abou
+                        loopPlayer.layer = self.videoLayer
                         vyncs[index].unwatched = false
+                        updateView()
                         self.lastPlayed = index
-                        // waiting on you vs. following logic 
-                        var urls : [NSURL]
-                        if vyncs[index].waitingOnYou {
-                            urls = vyncs[index].waitingVideoUrls()
-                        }
-                        else {
-                            urls = vyncs[index].videoUrls()
-                        }
-                        self.videoPlayer = QueueLoopVideoPlayer()
-                        self.videoPlayer!.view.addGestureRecognizer(sender)
-                        self.videoPlayer!.videoList = urls
-                        self.videoPlayer!.playVideos()
-                        if self.presentedViewController == nil {
-                            self.presentViewController(self.videoPlayer!, animated: false, completion:nil)
-                        }
                     }
+                    self.navigationController?.view.layer.addSublayer(self.videoLayer)
+                    self.videoLayer.playVideos()
                 }
             }
         }
         if sender.state == .Ended {
-            self.videoPlayer?.stop()
-            self.vyncTable.reloadData()
-            self.vyncTable.setNeedsDisplay()
+            self.videoLayer.player.pause()
+            self.videoLayer.removeFromSuperlayer()
+            UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: .None)
         }
     }
     
     func singleTapCell(sender:UITapGestureRecognizer){
         let indexPath = self.vyncTable.indexPathForRowAtPoint(sender.view!.center)
         if let cell = vyncTable.cellForRowAtIndexPath(indexPath!) as? VyncCell {
-            cell.selectCellAnimation()
-            
             let index = indexPath!.row as Int
             let v = vyncs[index]
-            for video in v.messages {
-                println("Vid.\(video.id):\n date\(video.createdAt)")
+            if v.isSaved == false {
+                cell.statusLogo.hidden = true
+                cell.saving.startAnimating()
+                VideoMessage.saveTheseVids(v.messages) {done in
+                    cell.statusLogo.hidden = false
+                    cell.saving.stopAnimating()
+                    self.updateView()
+                    cell.deselectCellAnimation()
+                }
+            } else {
+                println("saved")
+                cell.selectCellAnimation()
             }
         }
 
@@ -298,18 +293,13 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
     }
 
     func reply(index:Int){
-        println("showing Reply Camera")
-        UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: .None)
         let camera = self.storyboard?.instantiateViewControllerWithIdentifier("Camera") as VyncCameraViewController
         camera.vync = vyncs[index]
         self.presentViewController(camera, animated: false, completion: nil)
     }
 
     @IBAction func showCam() {
-        println("showing Camera")
-        UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: .None)
         let camera = self.storyboard?.instantiateViewControllerWithIdentifier("Camera") as VyncCameraViewController
-
         self.presentViewController(camera, animated: false, completion: nil)
     }
     

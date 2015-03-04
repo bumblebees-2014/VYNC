@@ -13,7 +13,9 @@
 
 import UIKit
 import CoreData
-
+import Fabric
+import Crashlytics
+ 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -23,6 +25,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch
         FBLoginView.self
         FBProfilePictureView.self
+        Fabric.with([Crashlytics()])
+        application.setStatusBarStyle(UIStatusBarStyle.BlackOpaque, animated: false)
         if signedUp() == false {
             self.window = UIWindow()
             self.window?.frame = UIScreen.mainScreen().bounds
