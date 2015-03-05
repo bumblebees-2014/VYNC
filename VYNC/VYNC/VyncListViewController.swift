@@ -171,6 +171,7 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
                     done in
                     self.deadVyncs[indexPath.row].delete()
                     self.deadVyncs.removeAtIndex(indexPath.row)
+                    self.lastPlayed = nil;
                     self.vyncTable.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic
                     )
                 }
