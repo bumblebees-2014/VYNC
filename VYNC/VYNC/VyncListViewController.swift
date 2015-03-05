@@ -20,6 +20,7 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
     
     var refreshControl:UIRefreshControl!
     var vyncs = VideoMessage.asVyncs()
+    var deadVyncs = VideoMessage.deadVyncs()
     var lastPlayed : Int? = nil
     var videoLayer = VyncPlayerLayer()
     
@@ -75,7 +76,6 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
     // ACTIONS
     
     @IBAction func reloadVyncs() {
-        println("refresh \(VideoMessage.syncer.all().exec()!.count)")
         self.refreshControl.beginRefreshing()
         VideoMessage.syncer.uploadNew() {done in
             VideoMessage.syncer.downloadNew() {done in
@@ -90,6 +90,7 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
     
     func updateView() {
         self.vyncs = VideoMessage.asVyncs()
+        self.deadVyncs = VideoMessage.deadVyncs()
         self.vyncTable.reloadData()
         self.vyncTable.setNeedsDisplay()
     }
@@ -107,7 +108,23 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
     
     // CELL PROPERTIES
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return vyncs.count
+        if(section == 0) {
+            return vyncs.count
+        } else {
+            return deadVyncs.count
+        }
+    }
+    
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 2
+    }
+    
+    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if(section == 0) {
+            return "Active VYNCS"
+        } else {
+            return "Inactive VYNCS"
+        }
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -120,14 +137,10 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
         return cell
     }
     
-    // SWIPE TO FORWARD FEATURE
+    // CELL EDITING FEATURES
     
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        if vyncs[indexPath.row].waitingOnYou {
-            return true
-        } else {
-            return false
-        }
+        return indexPath.section == 0 ? vyncs[indexPath.row].waitingOnYou : true
     }
     
     func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
@@ -138,17 +151,32 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
-        let replyClosure = { (action: UITableViewRowAction!, indexPath: NSIndexPath!) -> Void in
-            self.reply(indexPath.row)
+        if(indexPath.section == 0) {
+            let replyClosure = { (action: UITableViewRowAction!, indexPath: NSIndexPath!) -> Void in
+                self.reply(indexPath.row)
+            }
+            
+            let reply = UITableViewRowAction(
+                style: UITableViewRowActionStyle.Normal,
+                title: "FORWARD",
+                handler: replyClosure
+            )
+            reply.backgroundColor = UIColor(netHex: 0xFFB5C9)
+            return [reply]
+        } else {
+            let delete = UITableViewRowAction(
+                style: UITableViewRowActionStyle.Normal,
+                title: "DELETE",
+                handler: {
+                    done in
+                    self.deadVyncs[indexPath.row].delete()
+                    self.deadVyncs.removeAtIndex(indexPath.row)
+                    self.vyncTable.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic
+                    )
+                }
+            )
+            return [delete]
         }
-        
-        let reply = UITableViewRowAction(
-            style: UITableViewRowActionStyle.Normal,
-            title: "FORWARD",
-            handler: replyClosure
-        )
-        reply.backgroundColor = UIColor(netHex: 0xFFB5C9)
-        return [reply]
     }
     
     // CELL GESTURES
@@ -171,20 +199,21 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
         singleTap.requireGestureRecognizerToFail(doubleTap)
     }
 
-    
-    
     @IBAction func holdToPlayVideos(sender: UILongPressGestureRecognizer) {
         if sender.state == .Began {
-            if let index = self.vyncTable.indexPathForRowAtPoint(sender.view!.center)?.row as Int! {
-                if vyncs[index].isSaved {
+            if let indexPath = self.vyncTable.indexPathForRowAtPoint(sender.view!.center)? {
+                let array = indexPath.section == 0 ? vyncs : deadVyncs
+                let index = indexPath.row as Int
+                let vync = array[index]
+                if vync.isSaved {
                     if index != self.lastPlayed {
                         self.videoLayer.player = nil
-                        let items = vyncs[index].videoItems()
+                        let items = array[index].videoItems()
                         var loopPlayer = AVQueueLoopPlayer(items: items)
                         self.videoLayer.player = loopPlayer
                         // In order to communicate the information abou
                         loopPlayer.layer = self.videoLayer
-                        vyncs[index].unwatched = false
+                        vync.markAsWatched()
                         updateView()
                         self.lastPlayed = index
                     }
@@ -202,9 +231,11 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
     
     func singleTapCell(sender:UITapGestureRecognizer){
         let indexPath = self.vyncTable.indexPathForRowAtPoint(sender.view!.center)
+        let array = indexPath?.section == 0 ? vyncs : deadVyncs
+
         if let cell = vyncTable.cellForRowAtIndexPath(indexPath!) as? VyncCell {
             let index = indexPath!.row as Int
-            let v = vyncs[index]
+            let v = array[index]
             if v.isSaved == false {
                 cell.statusLogo.hidden = true
                 cell.saving.startAnimating()
@@ -215,7 +246,6 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
                     cell.deselectCellAnimation()
                 }
             } else {
-                println("saved")
                 if !cell.isFlipped {
                     cell.selectCellAnimation()
                 }
@@ -226,18 +256,18 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
     
     func doubleTapCell(sender:UITapGestureRecognizer){
         let indexPath:NSIndexPath = self.vyncTable.indexPathForRowAtPoint(sender.view!.center)!
+        let array = indexPath.section == 0 ? vyncs : deadVyncs
         if let cell = vyncTable.cellForRowAtIndexPath(indexPath) as? VyncCell {
             if cell.isFlipped == false {
-
                 cell.isFlipped = true
                 // In case it was single tapped before
                 cell.subTitle.textColor = UIColor.clearColor()
                 cell.titleLabel.transform = CGAffineTransformMakeTranslation(0, 0)
-                cell.titleLabel.text = "Users on this vync:\n" + vyncs[indexPath.row].usersList()
+                cell.titleLabel.text = "Users on this vync:\n" + array[indexPath.row].usersList
                 vyncTable.beginUpdates()
                 vyncTable.endUpdates()
             } else {
-                cell.titleLabel.text = vyncs[indexPath.row].title()
+                cell.titleLabel.text = array[indexPath.row].title
                 cell.isFlipped = false
                 vyncTable.beginUpdates()
                 vyncTable.endUpdates()

@@ -22,7 +22,7 @@
 		48883BA91A71CFD70024F2DA /* HexColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48883BA81A71CFD70024F2DA /* HexColor.swift */; };
 		48883BAE1A7224A50024F2DA /* IMG_0370.MOV in Resources */ = {isa = PBXBuildFile; fileRef = 48883BAD1A7224A50024F2DA /* IMG_0370.MOV */; };
 		48883BB01A72967F0024F2DA /* camera-rotate.png in Resources */ = {isa = PBXBuildFile; fileRef = 48883BAF1A72967F0024F2DA /* camera-rotate.png */; };
-		48883BB81A73D96D0024F2DA /* LoadFromNibExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48883BB71A73D96D0024F2DA /* LoadFromNibExtension.swift */; };
+		48883BB81A73D96D0024F2DA /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48883BB71A73D96D0024F2DA /* Extensions.swift */; };
 		489105FA1A9B726F00DDA009 /* LoginPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489105F91A9B726F00DDA009 /* LoginPageViewController.swift */; };
 		489105FF1A9B90A500DDA009 /* p1.png in Resources */ = {isa = PBXBuildFile; fileRef = 489105FB1A9B90A500DDA009 /* p1.png */; };
 		489106001A9B90A500DDA009 /* p2.png in Resources */ = {isa = PBXBuildFile; fileRef = 489105FC1A9B90A500DDA009 /* p2.png */; };
@@ -84,7 +84,7 @@
 		48883BA81A71CFD70024F2DA /* HexColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HexColor.swift; sourceTree = "<group>"; };
 		48883BAD1A7224A50024F2DA /* IMG_0370.MOV */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; name = IMG_0370.MOV; path = ../../../../../../../Downloads/IMG_0370.MOV; sourceTree = "<group>"; };
 		48883BAF1A72967F0024F2DA /* camera-rotate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera-rotate.png"; sourceTree = "<group>"; };
-		48883BB71A73D96D0024F2DA /* LoadFromNibExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadFromNibExtension.swift; sourceTree = "<group>"; };
+		48883BB71A73D96D0024F2DA /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		489105F91A9B726F00DDA009 /* LoginPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginPageViewController.swift; sourceTree = "<group>"; };
 		489105FB1A9B90A500DDA009 /* p1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = p1.png; sourceTree = "<group>"; };
 		489105FC1A9B90A500DDA009 /* p2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = p2.png; sourceTree = "<group>"; };
@@ -244,7 +244,7 @@
 			isa = PBXGroup;
 			children = (
 				48883BA81A71CFD70024F2DA /* HexColor.swift */,
-				48883BB71A73D96D0024F2DA /* LoadFromNibExtension.swift */,
+				48883BB71A73D96D0024F2DA /* Extensions.swift */,
 				48E9F7851A7960EB0034CF5E /* HTTPRequestSerializer.swift */,
 				48E9F7871A7960F80034CF5E /* HTTPResponseSerializer.swift */,
 				48E9F7891A7961050034CF5E /* HTTPTask.swift */,
@@ -439,7 +439,7 @@
 				4875B2FD1A6C79760030AABD /* AppDelegate.swift in Sources */,
 				489105FA1A9B726F00DDA009 /* LoginPageViewController.swift in Sources */,
 				48E9F7901A7961F90034CF5E /* Sycner.swift in Sources */,
-				48883BB81A73D96D0024F2DA /* LoadFromNibExtension.swift in Sources */,
+				48883BB81A73D96D0024F2DA /* Extensions.swift in Sources */,
 				48A361041A7FBD380023D6DC /* AF+Date+Extension.swift in Sources */,
 				48E9F7861A7960EB0034CF5E /* HTTPRequestSerializer.swift in Sources */,
 				48E9F78E1A79618C0034CF5E /* JSONJoy.swift in Sources */,
