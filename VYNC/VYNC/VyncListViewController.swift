@@ -112,47 +112,11 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("VyncCell", forIndexPath: indexPath) as VyncCell
-        // Set table as a reference
-        cell.table = vyncTable
         
+        let array = indexPath.section == 0 ? vyncs : deadVyncs
+        let vync = array[indexPath.row] as Vync
+        cell.setVyncData(vync)
         addGesturesToCell(cell)
-       //        Set Title and Length Labels
-        let date = vyncs[indexPath.row].mostRecent()
-        
-        cell.titleLabel.text = vyncs[indexPath.row].title()
-        cell.lengthLabel.text = String(vyncs[indexPath.row].size())
-        // New vyncs get special color and gesture
-        if vyncs[indexPath.row].waitingOnYou {
-            cell.statusLogo.textColor = UIColor(netHex:0xFFB5C9)
-            cell.lengthLabel.backgroundColor = UIColor(netHex:0xFFB5C9)
-            cell.subTitle.text = "\(date) - Swipe to Reply"
-        } else {
-            cell.subTitle.text = "\(date) - Hold to Play"
-            cell.statusLogo.textColor = UIColor(netHex:0x7FF2FF)
-            cell.lengthLabel.backgroundColor = UIColor(netHex:0x7FF2FF)
-        }
-        // Unwatched vyncs get a flame
-        if vyncs[indexPath.row].unwatched {
-            cell.isWatchedLabel.hidden = false
-        } else {
-            cell.isWatchedLabel.hidden = true
-        }
-        
-        // Not yet uploaded vyncs/Not yet saved vyncs get special background color
-        if vyncs[indexPath.row].notUploaded {
-            cell.contentView.layer.borderWidth = 0.5
-            cell.contentView.layer.borderColor = UIColor.redColor().CGColor
-            cell.lengthLabel.layer.borderWidth = 2.0
-            cell.lengthLabel.layer.borderColor = UIColor.redColor().CGColor
-        } else if vyncs[indexPath.row].isSaved == false {
-            cell.statusLogo.textColor = UIColor.orangeColor()
-            cell.subTitle.textColor = UIColor.orangeColor()
-            cell.titleLabel.transform = CGAffineTransformMakeTranslation(0, -10)
-            cell.subTitle.text = "Tap to download"
-        } else {
-            cell.contentView.layer.borderWidth = 0.0
-            cell.lengthLabel.layer.borderWidth = 0.0
-        }
         return cell
     }
     
