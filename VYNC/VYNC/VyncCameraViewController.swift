@@ -246,7 +246,7 @@ class VyncCameraViewController: UIViewController, AVCaptureFileOutputRecordingDe
         if title != nil {
             contacts.vyncTitle = title!
         } else {
-            contacts.replyToId = vync.replyToId()
+            contacts.replyToId = vync.replyToId
         }
         self.presentViewController(contactsNav, animated: true, completion: {
             done in
