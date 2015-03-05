@@ -10,22 +10,21 @@ import Foundation
 import CoreData
 import AVFoundation
 
-class Vync {
-    var flipped = false
+struct Vync {
     
     var messages : [VideoMessage]
+    init(messages: [VideoMessage]){
+        self.messages = messages
+    }
+    
     var notUploaded: Bool {
-        get {
-            return self.messages.first!.id == 0
-        }
+        return self.messages.first!.id == 0
     }
     var waitingOnYou: Bool {
-        get {
-            if let mostRecentRecipient = self.messages.first {
-                return myUserId() == mostRecentRecipient.recipientId
-            } else {
-                return false
-            }  
+        if let mostRecentRecipient = self.messages.first {
+            return myUserId() == mostRecentRecipient.recipientId
+        } else {
+            return false
         }
     }
     
@@ -34,48 +33,22 @@ class Vync {
     }
     
     var unwatched: Bool {
-        get {
-            return self.messages.first!.watched == 0 || self.messages.first!.watched == nil
-        }
-        set {
-            self.messages.first!.watched = 1
-            VideoMessage.syncer.save()
-        }
-    }
-    
-    init(messages: [VideoMessage]){
-        self.messages = messages
+        return self.messages.first!.watched == 0 || self.messages.first!.watched == nil
     }
 
-    func size()-> String{
+    var size: String {
         return "\(self.messages.count)"
     }
     
-    func videoItems()->[AVPlayerItem]{
-        if waitingOnYou {
-            let firstMessage = self.messages.first!
-            let firstMessageUrl = NSURL.fileURLWithPath(docFolderToSaveFiles + "/" + firstMessage.videoId!) as NSURL!
-            let firstItem = AVPlayerItem(URL: firstMessageUrl)
-            let standinItem = AVPlayerItem(URL: standin)
-            return [firstItem, standinItem]
-            
-        } else {
-            return self.messages.map({
-                message in
-                AVPlayerItem(URL: (NSURL.fileURLWithPath(docFolderToSaveFiles + "/" + message.videoId!) as NSURL!))
-            })
-        }
-    }
-
-    func replyToId()->Int {
-        if let first = self.messages.last {
-            return first.replyToId as Int
+    var replyToId: Int {
+        if let initialMessage = self.messages.last {
+            return initialMessage.replyToId as Int
         } else {
             return 0
         }
     }
     
-    func mostRecent()->String{
+    var date: String {
         if let createdAt = messages.first?.createdAt {
             if let date = createdAtToNSDate(createdAt) as NSDate! {
                 return "\(date.mediumDateString)"
@@ -99,29 +72,56 @@ class Vync {
     
     var title: String {
 
-    func title()->String {
-        if self.messages.count != 0 {
-            if let video = messages.last as VideoMessage! {
-                if let title = video.title as String! {
-                    if title == "" {
-                        return "N/A"
-                    } else if countElements(title) > 15 {
-                        return title[0...15]
-                    } else {
-                        return title
-                    }
+        if let video = messages.last as VideoMessage! {
+            if let title = video.title as String! {
+                if title == "" {
+                    return "N/A"
+                } else if countElements(title) > 15 {
+                    return title[0...15]
+                } else {
+                    return title
                 }
             }
         }
-        return "oops"
+        return "Title Error"
     }
     
-    func usersList()->String{
+    var usersList: String {
         let userNames = self.messages.map({
             message in
             "\(self.findUsername(message.senderId as Int))"
         })
         return ("\n").join(userNames)
+    }
+    
+    func videoItems()->[AVPlayerItem]{
+        if waitingOnYou {
+            let firstMessage = self.messages.first!
+            let firstMessageUrl = NSURL.fileURLWithPath(docFolderToSaveFiles + "/" + firstMessage.videoId!) as NSURL!
+            let firstItem = AVPlayerItem(URL: firstMessageUrl)
+            let standinItem = AVPlayerItem(URL: standin)
+            return [firstItem, standinItem]
+            
+        } else {
+            return self.messages.map({
+                message in
+                AVPlayerItem(URL: (NSURL.fileURLWithPath(docFolderToSaveFiles + "/" + message.videoId!) as NSURL!))
+            })
+        }
+    }
+    
+    func createdAtToNSDate(string:String)->NSDate? {
+        let formatter = NSDateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        let secondFormatter = NSDateFormatter()
+        secondFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss 'UTC'"
+        if let date = formatter.dateFromString(string) as NSDate! {
+            return date
+        } else if let date = secondFormatter.dateFromString(string) as NSDate! {
+            return date
+        } else {
+            return nil
+        }
     }
     
     func findUsername(userId:Int)->String{
@@ -130,6 +130,21 @@ class Vync {
         } else {
             return "Fail :("
         }
+    }
+    
+    func markAsWatched() {
+        self.messages.first!.watched = 1
+        VideoMessage.syncer.save()
+    }
+    
+    func delete() {
+        let fm = NSFileManager()
+        for message in self.messages {
+            let localUrlString = "\(docFolderToSaveFiles)/\(message.videoId!)"
+            fm.removeItemAtPath(localUrlString, error: nil)
+            VideoMessage.syncer.delete(message)
+        }
+        VideoMessage.syncer.save()
     }
     
 }
