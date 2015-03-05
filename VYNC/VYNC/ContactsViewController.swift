@@ -20,14 +20,15 @@ class ContactsViewController: UIViewController, UITableViewDelegate, UITableView
     @IBOutlet weak var searchBar: UISearchBar!
     
     override func viewDidLoad() {
-        for user in contacts {
-            println("User\(user.id)\n \(user.username)\n")
-        }
         super.viewDidLoad()
         contactsList.reloadData()
         contactsList.setNeedsDisplay()
     }
 
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: .None)
+    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -71,7 +72,7 @@ class ContactsViewController: UIViewController, UITableViewDelegate, UITableView
         
         if self.replyToId != 0 {
             println("making a reply \(replyToId)")
-            let vyncToUpdate = VideoMessage.asVyncs().filter({vync in vync.replyToId() == self.replyToId})[0]
+            let vyncToUpdate = VideoMessage.asVyncs().filter({vync in vync.replyToId == self.replyToId})[0]
 
             var newMessage = VideoMessage.syncer.newObj()
             newMessage.id = 0

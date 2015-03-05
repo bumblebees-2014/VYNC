@@ -36,12 +36,12 @@ class Syncer<T: NSManagedObject> {
     }
     
     // HTTP Functions
-    func sync(completion:(()->()) = {}) {
+    func sync(completion : (Void -> Void) = {}) {
         uploadNew()
-        downloadNew()
+        downloadNew(completion)
     }
     
-    func uploadNew(completion:(()->()) = {}){
+    func uploadNew(completion:(Void -> Void) = {}){
         // post the video that the user takes to the server
         let newObjs = all().filter("id == %@", args: 0).exec()!
         if newObjs.count == 0 {
@@ -90,7 +90,7 @@ class Syncer<T: NSManagedObject> {
         })
     }
     
-    func uploadWithFile(obj:T, completion: (()->()) = {}) {
+    func uploadWithFile(obj:T, completion: (Void -> Void) = {}) {
         let json = createJSONfromObject(obj)
         let video = obj as VideoMessage
         let videoURL = NSURL.fileURLWithPath(docFolderToSaveFiles + "/" + video.videoId!)!
@@ -133,7 +133,7 @@ class Syncer<T: NSManagedObject> {
         var json = NSMutableDictionary()
         for name in propertyNames() {
             if let value: AnyObject = obj.valueForKey(name) {
-                json[camelToSnake(name)] = value
+                json[name.camelToSnake()] = value
             }
         }
         return json
@@ -154,7 +154,7 @@ class Syncer<T: NSManagedObject> {
         return names
     }
     
-    func downloadNew(completion:(()->()) = {}){
+    func downloadNew(completion:(Void -> Void) = {}){
         var since = 0
         if let newest = all().last {
             since = newest.valueForKey("id") as Int
@@ -191,7 +191,7 @@ class Syncer<T: NSManagedObject> {
         if let desc = self.entityDescription {
             for attribute in desc.attributesByName {
                 let name = attribute.0 as String
-                let decoderName = camelToSnake(name)
+                let decoderName = name.camelToSnake()
                 let attr = attribute.1 as NSAttributeDescription
                 switch attr.attributeType {
                 case .StringAttributeType:
@@ -218,27 +218,5 @@ class Syncer<T: NSManagedObject> {
     func delete(object: NSManagedObject){
         db!.deleteObject(object)
     }
-    
-    func camelToSnake(attribute:String)->String{
-        // I would love to do this whole thing functionally, but swift's map is broken with characters
-        var arr = map(attribute) { String($0) }
-        var str = ""
-        for letter in arr {
-            if letter == letter.capitalizedString {
-                str += "_\(letter.lowercaseString)"
-            } else
-            {
-                str += letter
-            }
-        }
-        return str
-    }
-    
-    func snakeToCamel(attribute:String)->String{
-        var splitString = attribute.componentsSeparatedByString("_")
-        var firstString = splitString.removeAtIndex(0)
-        var capitalizedString = splitString.map({string in string.uppercaseString})
-        capitalizedString.insert(firstString, atIndex: 0)
-        return join("", capitalizedString)
-    }
+
 }

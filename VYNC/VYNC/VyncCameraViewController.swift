@@ -10,7 +10,7 @@ import UIKit
 import Foundation
 import AVFoundation
 
-class VyncCameraViewController: UIViewController, AVCaptureFileOutputRecordingDelegate, VyncCameraPlaybackLayerDelegate {
+class VyncCameraViewController: UIViewController, AVCaptureFileOutputRecordingDelegate, VyncCameraPlaybackLayerDelegate, UITextFieldDelegate {
     
     let captureSession = AVCaptureSession()
     var captureDevice : AVCaptureDevice!
@@ -20,7 +20,7 @@ class VyncCameraViewController: UIViewController, AVCaptureFileOutputRecordingDe
     var videoConnection : AVCaptureConnection!
     var vync : Vync!
     var rotating = false
-    var playerLayerView : VyncCameraPlaybackLayer!
+    weak var playerLayerView : VyncCameraPlaybackLayer!
     @IBOutlet weak var flashButton: UIButton!
     
     @IBOutlet weak var flipCameraButton: UIButton!
@@ -179,17 +179,6 @@ class VyncCameraViewController: UIViewController, AVCaptureFileOutputRecordingDe
         }
     }
     
-    func transitionToRootView(){
-        if self.playerLayerView != nil {
-            self.playerLayerView.removeFromSuperview()
-            // This is necessary because if there is still
-            // a pointer to the playerLayer, it won't deinit
-            self.playerLayerView = nil
-        }
-        let vc = self.storyboard?.instantiateViewControllerWithIdentifier("RootNavigationController") as UINavigationController
-        presentViewController(vc, animated: false, completion: {})
-    }
-    
     func onTap (tap: UITapGestureRecognizer){
         if let device = captureDevice {
             device.lockForConfiguration(nil)
@@ -199,26 +188,89 @@ class VyncCameraViewController: UIViewController, AVCaptureFileOutputRecordingDe
         }
     }
     // Playback Delegate Methods
-    func retakeVideo(view:VyncCameraPlaybackLayer) {
-        self.playerLayerView = nil
-        view.removeFromSuperview()
-        
+    func retakeVideo() {
+        self.dismissPlayerLayer()
     }
     
-    func acceptVideo(view:VyncCameraPlaybackLayer) {
-        view.removeFromSuperview()
-        self.playerLayerView = nil
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        let newLength = textField.text!.utf16Count + string.utf16Count - range.length
+        if let alertController = self.presentedViewController as? UIAlertController {
+            if let accept = alertController.actions.first as? UIAlertAction {
+                accept.enabled = newLength > 2
+            }
+        }
+        return newLength < 15
+    }
+    
+    func acceptVideo() {
         if (self.vync != nil) {
-            let contactsNav = self.storyboard?.instantiateViewControllerWithIdentifier("ContactsNav") as UINavigationController
-            // Instantiate contacts to set its replyToId property
-            let contacts = contactsNav.viewControllers[0] as ContactsViewController
-            contacts.replyToId = vync.replyToId()
-            self.presentViewController(contactsNav, animated: false, completion: nil)
+            transitionToContacts()
         } else {
-            let title = self.storyboard?.instantiateViewControllerWithIdentifier("TitleNav") as UINavigationController
-            self.presentViewController(title, animated: false, completion: nil)
+            self.playerLayerView.playerLayer.player.pause()
+            let alert = UIAlertController(
+                title: "Add A Title",
+                message: "Give your message a title",
+                preferredStyle: UIAlertControllerStyle.Alert
+            )
+            
+            alert.addTextFieldWithConfigurationHandler() { textField in
+                textField.delegate = self
+                textField.placeholder = "i.e Check out this jump!"
+            }
+            
+            let defaultAction : UIAlertAction = UIAlertAction(title: "OK",
+                style: .Default,
+                handler: { done in
+                    let title = (alert.textFields!.first as UITextField).text
+                    self.transitionToContacts(title: title)
+                    
+                })
+            defaultAction.enabled = false
+            
+            let cancelAction = UIAlertAction(title: "CANCEL",
+                style: .Cancel,
+                handler: { done in
+                    self.dismissPlayerLayer()
+                })
+            
+            alert.addAction(defaultAction)
+            alert.addAction(cancelAction)
+            self.presentViewController(alert, animated: false, completion: {})
         }
     }
+    
+    func transitionToContacts(title: String? = nil) {
+        let contactsNav = self.storyboard?.instantiateViewControllerWithIdentifier("ContactsNav") as UINavigationController
+        // Instantiate contacts to set its replyToId property
+        let contacts = contactsNav.viewControllers[0] as ContactsViewController
+        if title != nil {
+            contacts.vyncTitle = title!
+        } else {
+            contacts.replyToId = vync.replyToId
+        }
+        self.presentViewController(contactsNav, animated: true, completion: {
+            done in
+            self.dismissPlayerLayer()
+        })
+    }
+    
+    func transitionToRootView(){
+        let vc = self.storyboard?.instantiateViewControllerWithIdentifier("RootNavigationController") as UINavigationController
+        presentViewController(vc, animated: false, completion: {
+            done in
+            self.dismissPlayerLayer()
+        })
+    }
+    
+    func dismissPlayerLayer() {
+        if self.playerLayerView != nil {
+            self.playerLayerView.removeFromSuperview()
+            // This is necessary because if there is still
+            // a pointer to the playerLayer, it won't deinit
+            self.playerLayerView = nil
+        }
+    }
+
     
     func rotateOnce() {
         UIView.animateWithDuration(0.5,

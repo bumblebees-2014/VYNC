@@ -22,7 +22,7 @@
 		48883BA91A71CFD70024F2DA /* HexColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48883BA81A71CFD70024F2DA /* HexColor.swift */; };
 		48883BAE1A7224A50024F2DA /* IMG_0370.MOV in Resources */ = {isa = PBXBuildFile; fileRef = 48883BAD1A7224A50024F2DA /* IMG_0370.MOV */; };
 		48883BB01A72967F0024F2DA /* camera-rotate.png in Resources */ = {isa = PBXBuildFile; fileRef = 48883BAF1A72967F0024F2DA /* camera-rotate.png */; };
-		48883BB81A73D96D0024F2DA /* LoadFromNibExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48883BB71A73D96D0024F2DA /* LoadFromNibExtension.swift */; };
+		48883BB81A73D96D0024F2DA /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48883BB71A73D96D0024F2DA /* Extensions.swift */; };
 		489105FA1A9B726F00DDA009 /* LoginPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489105F91A9B726F00DDA009 /* LoginPageViewController.swift */; };
 		489105FF1A9B90A500DDA009 /* p1.png in Resources */ = {isa = PBXBuildFile; fileRef = 489105FB1A9B90A500DDA009 /* p1.png */; };
 		489106001A9B90A500DDA009 /* p2.png in Resources */ = {isa = PBXBuildFile; fileRef = 489105FC1A9B90A500DDA009 /* p2.png */; };
@@ -38,9 +38,9 @@
 		48A4DE7A1A7A600C000087A2 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A4DE791A7A600C000087A2 /* User.swift */; };
 		48BAECD91A782897005CC762 /* VyncCameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BAECD81A782897005CC762 /* VyncCameraViewController.swift */; };
 		48BAECDD1A7829F8005CC762 /* VyncCameraPlaybackLayer.xib in Resources */ = {isa = PBXBuildFile; fileRef = 48BAECDC1A7829F8005CC762 /* VyncCameraPlaybackLayer.xib */; };
-		48CBB63C1A76A76C004A6E6D /* TitleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48CBB63B1A76A76C004A6E6D /* TitleViewController.swift */; };
 		48CE912E1A9F7312004B6271 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48CE912C1A9F7312004B6271 /* Crashlytics.framework */; };
 		48CE912F1A9F7312004B6271 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48CE912D1A9F7312004B6271 /* Fabric.framework */; };
+		48CE91471AA10DEA004B6271 /* LandingScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = 48CE91461AA10DEA004B6271 /* LandingScreen.png */; };
 		48CEDE201A7BC3AD0015997D /* GlobalVars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48CEDE1F1A7BC3AD0015997D /* GlobalVars.swift */; };
 		48CEDE221A7BC4E00015997D /* VideoMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48CEDE211A7BC4E00015997D /* VideoMessage.swift */; };
 		48E9F7861A7960EB0034CF5E /* HTTPRequestSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E9F7851A7960EB0034CF5E /* HTTPRequestSerializer.swift */; };
@@ -84,7 +84,7 @@
 		48883BA81A71CFD70024F2DA /* HexColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HexColor.swift; sourceTree = "<group>"; };
 		48883BAD1A7224A50024F2DA /* IMG_0370.MOV */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; name = IMG_0370.MOV; path = ../../../../../../../Downloads/IMG_0370.MOV; sourceTree = "<group>"; };
 		48883BAF1A72967F0024F2DA /* camera-rotate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera-rotate.png"; sourceTree = "<group>"; };
-		48883BB71A73D96D0024F2DA /* LoadFromNibExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadFromNibExtension.swift; sourceTree = "<group>"; };
+		48883BB71A73D96D0024F2DA /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		489105F91A9B726F00DDA009 /* LoginPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginPageViewController.swift; sourceTree = "<group>"; };
 		489105FB1A9B90A500DDA009 /* p1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = p1.png; sourceTree = "<group>"; };
 		489105FC1A9B90A500DDA009 /* p2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = p2.png; sourceTree = "<group>"; };
@@ -100,9 +100,9 @@
 		48A4DE791A7A600C000087A2 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		48BAECD81A782897005CC762 /* VyncCameraViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VyncCameraViewController.swift; sourceTree = "<group>"; };
 		48BAECDC1A7829F8005CC762 /* VyncCameraPlaybackLayer.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VyncCameraPlaybackLayer.xib; sourceTree = "<group>"; };
-		48CBB63B1A76A76C004A6E6D /* TitleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleViewController.swift; sourceTree = "<group>"; };
 		48CE912C1A9F7312004B6271 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		48CE912D1A9F7312004B6271 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
+		48CE91461AA10DEA004B6271 /* LandingScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LandingScreen.png; sourceTree = "<group>"; };
 		48CEDE1F1A7BC3AD0015997D /* GlobalVars.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalVars.swift; sourceTree = "<group>"; };
 		48CEDE211A7BC4E00015997D /* VideoMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoMessage.swift; sourceTree = "<group>"; };
 		48E9F7851A7960EB0034CF5E /* HTTPRequestSerializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPRequestSerializer.swift; sourceTree = "<group>"; };
@@ -156,9 +156,10 @@
 			children = (
 				4875B31F1A6C79B50030AABD /* VyncListViewController.swift */,
 				481AF25A1A706B5F0018B887 /* VyncCell.swift */,
+				48F119391A784CCD00A02828 /* QueueLoopVideoPlayer.swift */,
 				483663981A75A80E0096AE64 /* ContactsViewController.swift */,
-				48CBB63B1A76A76C004A6E6D /* TitleViewController.swift */,
 				48BAECD81A782897005CC762 /* VyncCameraViewController.swift */,
+				48F1193B1A78605D00A02828 /* PlaybackOverlay.swift */,
 				4846BCC21A810DA200FC489C /* LoginViewController.swift */,
 				489105F91A9B726F00DDA009 /* LoginPageViewController.swift */,
 				489A9A051A8CFBA000902CC9 /* MyStatsViewController.swift */,
@@ -169,10 +170,8 @@
 		4836638F1A7535E40096AE64 /* Views_And_Layers */ = {
 			isa = PBXGroup;
 			children = (
-				48F1193B1A78605D00A02828 /* PlaybackOverlay.swift */,
 				4875B3031A6C79760030AABD /* Main.storyboard */,
 				48BAECDC1A7829F8005CC762 /* VyncCameraPlaybackLayer.xib */,
-				48F119391A784CCD00A02828 /* QueueLoopVideoPlayer.swift */,
 			);
 			name = Views_And_Layers;
 			sourceTree = "<group>";
@@ -245,7 +244,7 @@
 			isa = PBXGroup;
 			children = (
 				48883BA81A71CFD70024F2DA /* HexColor.swift */,
-				48883BB71A73D96D0024F2DA /* LoadFromNibExtension.swift */,
+				48883BB71A73D96D0024F2DA /* Extensions.swift */,
 				48E9F7851A7960EB0034CF5E /* HTTPRequestSerializer.swift */,
 				48E9F7871A7960F80034CF5E /* HTTPResponseSerializer.swift */,
 				48E9F7891A7961050034CF5E /* HTTPTask.swift */,
@@ -277,6 +276,7 @@
 		4899A1BF1A705A6D005D3BE0 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				48CE91461AA10DEA004B6271 /* LandingScreen.png */,
 				489105FB1A9B90A500DDA009 /* p1.png */,
 				489105FC1A9B90A500DDA009 /* p2.png */,
 				489105FD1A9B90A500DDA009 /* p3.png */,
@@ -373,6 +373,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				489106001A9B90A500DDA009 /* p2.png in Resources */,
+				48CE91471AA10DEA004B6271 /* LandingScreen.png in Resources */,
 				48883BAE1A7224A50024F2DA /* IMG_0370.MOV in Resources */,
 				489BA1C31A8E2DB3006DE44F /* flaticon.ttf in Resources */,
 				48883BB01A72967F0024F2DA /* camera-rotate.png in Resources */,
@@ -428,7 +429,6 @@
 				4875B3201A6C79B50030AABD /* VyncListViewController.swift in Sources */,
 				483663991A75A80E0096AE64 /* ContactsViewController.swift in Sources */,
 				481AF25B1A706B5F0018B887 /* VyncCell.swift in Sources */,
-				48CBB63C1A76A76C004A6E6D /* TitleViewController.swift in Sources */,
 				48A4DE7A1A7A600C000087A2 /* User.swift in Sources */,
 				48E9F78A1A7961050034CF5E /* HTTPTask.swift in Sources */,
 				48E9F7881A7960F80034CF5E /* HTTPResponseSerializer.swift in Sources */,
@@ -439,7 +439,7 @@
 				4875B2FD1A6C79760030AABD /* AppDelegate.swift in Sources */,
 				489105FA1A9B726F00DDA009 /* LoginPageViewController.swift in Sources */,
 				48E9F7901A7961F90034CF5E /* Sycner.swift in Sources */,
-				48883BB81A73D96D0024F2DA /* LoadFromNibExtension.swift in Sources */,
+				48883BB81A73D96D0024F2DA /* Extensions.swift in Sources */,
 				48A361041A7FBD380023D6DC /* AF+Date+Extension.swift in Sources */,
 				48E9F7861A7960EB0034CF5E /* HTTPRequestSerializer.swift in Sources */,
 				48E9F78E1A79618C0034CF5E /* JSONJoy.swift in Sources */,

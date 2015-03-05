@@ -26,12 +26,10 @@ class AVQueueLoopPlayer : AVQueuePlayer {
             var asset = playerItem.asset
             var copyOfPlayerItem = AVPlayerItem(asset: asset)
             self.insertItem(copyOfPlayerItem, afterItem: nil)
-            println("REPEAT. Items Size=\(self.items().count)")
         }
     }
     
     deinit {
-        println("queue deinit")
         NSNotificationCenter.defaultCenter().removeObserver(self, name: "AVPlayerItemDidPlayToEndTimeNotification", object: nil)
     }
 }

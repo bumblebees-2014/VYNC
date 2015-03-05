@@ -19,8 +19,6 @@ let path = NSBundle.mainBundle().pathForResource("VYNC", ofType:"mov")
 let standin = NSURL.fileURLWithPath(path!) as NSURL!
 let s3Url = "https://s3-us-west-2.amazonaws.com/telephono/"
 
-let screenSize = UIScreen.mainScreen().bounds
-
 let docFolderToSaveFiles = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
 let fileName = "/videoToSend.MOV"
 let pathToFile = docFolderToSaveFiles + fileName
@@ -28,15 +26,6 @@ let pathToFile = docFolderToSaveFiles + fileName
 let host = "https://vync-api.herokuapp.com" //"http://192.168.0.6:9393"
 var deviceToken = ""
 
-
-var db : NSManagedObjectContext? = {
-    let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
-    if let managedObjectContext = appDelegate.managedObjectContext {
-        return managedObjectContext
-    } else {
-        return nil
-    }
-    }()
 
 public func signedUp()->Bool{
     if let user = User.syncer.all().filter("isMe == %@", args: 1).exec()?.first as User! {
@@ -46,8 +35,6 @@ public func signedUp()->Bool{
     }
 }
 
-// Fake Data
-
 func myUserId()->Int?{
     if let me = User.syncer.all().filter("isMe == %@", args: 1).exec()!.first as User! {
         return me.id as? Int
@@ -55,7 +42,6 @@ func myUserId()->Int?{
     } else {
         return nil
     }
-    
 }
 
 func me()->User{

@@ -68,9 +68,7 @@ class LoginViewController : UIViewController, FBLoginViewDelegate {
                 newUser.isMe = 1
                 newUser.email = email
                 User.syncer.save()
-                User.syncer.sync() {done in
-                    VideoMessage.syncer.downloadNew()
-                }
+                User.syncer.sync()
             }
         }
     }

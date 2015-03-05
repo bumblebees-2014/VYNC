@@ -10,20 +10,21 @@ import Foundation
 import CoreData
 import AVFoundation
 
-class Vync {
+struct Vync {
+    
     var messages : [VideoMessage]
+    init(messages: [VideoMessage]){
+        self.messages = messages
+    }
+    
     var notUploaded: Bool {
-        get {
-            return self.messages.first!.id == 0
-        }
+        return self.messages.first!.id == 0
     }
     var waitingOnYou: Bool {
-        get {
-            if let mostRecentRecipient = self.messages.first {
-                return myUserId() == mostRecentRecipient.recipientId
-            } else {
-                return false
-            }  
+        if let mostRecentRecipient = self.messages.first {
+            return myUserId() == mostRecentRecipient.recipientId
+        } else {
+            return false
         }
     }
     
@@ -32,50 +33,22 @@ class Vync {
     }
     
     var unwatched: Bool {
-        get {
-            return self.messages.first!.watched == 0 || self.messages.first!.watched == nil
-        }
-        set {
-            self.messages.first!.watched = 1
-            VideoMessage.syncer.save()
-        }
-    }
-    
-    init(messages: [VideoMessage]){
-        self.messages = messages
+        return self.messages.first!.watched == 0 || self.messages.first!.watched == nil
     }
 
-    func size()-> String{
+    var size: String {
         return "\(self.messages.count)"
     }
     
-    func videoItems()->[AVPlayerItem]{
-        if waitingOnYou {
-            let firstMessage = self.messages.first!
-            let firstMessageUrl = NSURL.fileURLWithPath(docFolderToSaveFiles + "/" + firstMessage.videoId!) as NSURL!
-            let firstItem = AVPlayerItem(URL: firstMessageUrl)
-            let standinItem = AVPlayerItem(URL: standin)
-            let data = NSData(contentsOfURL: firstMessageUrl)
-            println(data?.bytes)
-            return [firstItem, standinItem]
-            
-        } else {
-            return self.messages.map({
-                message in
-                AVPlayerItem(URL: (NSURL.fileURLWithPath(docFolderToSaveFiles + "/" + message.videoId!) as NSURL!))
-            })
-        }
-    }
-
-    func replyToId()->Int {
-        if let first = self.messages.last {
-            return first.replyToId as Int
+    var replyToId: Int {
+        if let initialMessage = self.messages.last {
+            return initialMessage.replyToId as Int
         } else {
             return 0
         }
     }
     
-    func mostRecent()->String{
+    var date: String {
         if let createdAt = messages.first?.createdAt {
             if let date = createdAtToNSDate(createdAt) as NSDate! {
                 return "\(date.mediumDateString)"
@@ -84,6 +57,56 @@ class Vync {
             }
         } else {
             return "Just now"
+        }
+    }
+    
+    var isDead: Bool {
+        if let createdAt = messages.first?.createdAt {
+            if let date = createdAtToNSDate(createdAt) as NSDate! {
+                let daysInterval = NSDate.today().timeIntervalSinceDate(date) / 86400
+                return daysInterval >= 2
+            }
+        }
+        return false
+    }
+    
+    var title: String {
+
+        if let video = messages.last as VideoMessage! {
+            if let title = video.title as String! {
+                if title == "" {
+                    return "N/A"
+                } else if countElements(title) > 15 {
+                    return title[0...15]
+                } else {
+                    return title
+                }
+            }
+        }
+        return "Title Error"
+    }
+    
+    var usersList: String {
+        let userNames = self.messages.map({
+            message in
+            "\(self.findUsername(message.senderId as Int))"
+        })
+        return ("\n").join(userNames)
+    }
+    
+    func videoItems()->[AVPlayerItem]{
+        if waitingOnYou {
+            let firstMessage = self.messages.first!
+            let firstMessageUrl = NSURL.fileURLWithPath(docFolderToSaveFiles + "/" + firstMessage.videoId!) as NSURL!
+            let firstItem = AVPlayerItem(URL: firstMessageUrl)
+            let standinItem = AVPlayerItem(URL: standin)
+            return [firstItem, standinItem]
+            
+        } else {
+            return self.messages.map({
+                message in
+                AVPlayerItem(URL: (NSURL.fileURLWithPath(docFolderToSaveFiles + "/" + message.videoId!) as NSURL!))
+            })
         }
     }
     
@@ -101,46 +124,27 @@ class Vync {
         }
     }
     
-    func dead()->Bool {
-        if let createdAt = messages.first?.createdAt {
-            if let date = createdAtToNSDate(createdAt) as NSDate! {
-               return date.isAtLeastTwoDaysAgo
-            }
-            else {
-                return false
-            }
-        } else {
-            return false
-        }
-    }
-
-    func title()->String {
-        if self.messages.count != 0 {
-        if let video = messages.last as VideoMessage! {
-            if let title = video.title as String! {
-                return title
-            } else {
-                return "TODO"
-            }
-        } else {
-            return "ToDo"
-        }
-        } else {return "oops"}
-    }
-    
-    func usersList()->[String]{
-        return self.messages.map({
-            message in
-            self.findUsername(message.senderId as Int)
-        })
-    }
-    
     func findUsername(userId:Int)->String{
         if let user = User.syncer.all().find(userId) as User! {
             return user.username
         } else {
             return "Fail :("
         }
+    }
+    
+    func markAsWatched() {
+        self.messages.first!.watched = 1
+        VideoMessage.syncer.save()
+    }
+    
+    func delete() {
+        let fm = NSFileManager()
+        for message in self.messages {
+            let localUrlString = "\(docFolderToSaveFiles)/\(message.videoId!)"
+            fm.removeItemAtPath(localUrlString, error: nil)
+            VideoMessage.syncer.delete(message)
+        }
+        VideoMessage.syncer.save()
     }
     
 }

@@ -21,16 +21,71 @@ class VyncCell: UITableViewCell, UIGestureRecognizerDelegate {
     var isMoving = false
     var isFlipped = false
 
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
         self.selectionStyle = UITableViewCellSelectionStyle.None
+        
         lengthLabel.layer.masksToBounds = true
         let corner = lengthLabel.layer.frame.width / 2
         lengthLabel.layer.cornerRadius = corner
         
         isWatchedLabel.text = "\u{e001}"
+        // DIY Separators
+        var frame = self.bounds
+        frame.origin.y = frame.size.height - 0.1
+        frame.size.height = 0.1
+        let separatorView = UIView(frame: frame)
+        separatorView.backgroundColor = UIColor.lightGrayColor()
+        separatorView.autoresizingMask = UIViewAutoresizing.FlexibleWidth|UIViewAutoresizing.FlexibleTopMargin
+        self.contentView.addSubview(separatorView)
+        
+    }
+    
+    func setVyncData(vync:Vync) {
+        //  Set Title and Length Labels
+
+        titleLabel.text = vync.title
+        lengthLabel.text = String(vync.size)
+        lengthLabel.textColor = UIColor.blackColor()
+        
+        //   New vyncs get special color and gesture
+        if vync.isDead {
+            statusLogo.textColor = UIColor.blackColor()
+            lengthLabel.backgroundColor = UIColor.blackColor()
+            lengthLabel.textColor = UIColor.whiteColor()
+            subTitle.text = "\(vync.date) - Swipe to Delete"
+        } else if vync.waitingOnYou {
+            statusLogo.textColor = UIColor(netHex:0xFFB5C9)
+            lengthLabel.backgroundColor = UIColor(netHex:0xFFB5C9)
+            subTitle.text = "\(vync.date) - Swipe to Reply"
+        } else {
+            subTitle.text = "\(vync.date) - Hold to Play"
+            statusLogo.textColor = UIColor(netHex:0x7FF2FF)
+            lengthLabel.backgroundColor = UIColor(netHex:0x7FF2FF)
+        }
+        // Unwatched vyncs get a flame
+        if vync.unwatched {
+            isWatchedLabel.hidden = false
+        } else {
+            isWatchedLabel.hidden = true
+        }
+        
+        // Not yet uploaded vyncs/Not yet saved vyncs get special background color
+        if vync.notUploaded {
+            contentView.layer.borderWidth = 0.5
+            contentView.layer.borderColor = UIColor.redColor().CGColor
+            lengthLabel.layer.borderWidth = 2.0
+            lengthLabel.layer.borderColor = UIColor.redColor().CGColor
+        } else if vync.isSaved == false {
+            statusLogo.textColor = UIColor.orangeColor()
+            subTitle.textColor = UIColor.orangeColor()
+            titleLabel.transform = CGAffineTransformMakeTranslation(0, -10)
+            subTitle.text = "Tap to download"
+        } else {
+            contentView.layer.borderWidth = 0.0
+            lengthLabel.layer.borderWidth = 0.0
+        }
     }
     
     func selectCellAnimation() {

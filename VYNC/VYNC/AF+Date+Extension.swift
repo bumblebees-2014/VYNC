@@ -153,10 +153,6 @@ public extension NSDate {
     public var isYesterday: Bool {
         return equalToDateIngoringTime(NSDate.yesterday())
     }
-
-    public var isAtLeastTwoDaysAgo: Bool {
-        return greaterThanDateIngoringTime(NSDate.twoDaysAgo())
-    }
     
     public func equalToDateIngoringTime(date: NSDate) -> Bool {
         let components1 = NSCalendar.currentCalendar().components(componentFlags, fromDate: self)
@@ -164,14 +160,6 @@ public extension NSDate {
         return components1.year == components2.year &&
             components1.month == components2.month &&
             components1.day == components2.day
-    }
-    
-    public func greaterThanDateIngoringTime(date: NSDate) -> Bool {
-        let components1 = NSCalendar.currentCalendar().components(componentFlags, fromDate: self)
-        let components2 = NSCalendar.currentCalendar().components(componentFlags, fromDate: date)
-        return components1.year <= components2.year &&
-            components1.month <= components2.month &&
-            components1.day <= components2.day
     }
     
     // MARK: Display Strings
