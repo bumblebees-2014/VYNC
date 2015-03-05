@@ -87,32 +87,17 @@ class Vync {
         }
     }
     
-    func createdAtToNSDate(string:String)->NSDate? {
-        let formatter = NSDateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-        let secondFormatter = NSDateFormatter()
-        secondFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss 'UTC'"
-        if let date = formatter.dateFromString(string) as NSDate! {
-            return date
-        } else if let date = secondFormatter.dateFromString(string) as NSDate! {
-            return date
-        } else {
-            return nil
-        }
-    }
-    
-    func dead()->Bool {
+    var isDead: Bool {
         if let createdAt = messages.first?.createdAt {
             if let date = createdAtToNSDate(createdAt) as NSDate! {
-               return date.isAtLeastTwoDaysAgo
+                let daysInterval = NSDate.today().timeIntervalSinceDate(date) / 86400
+                return daysInterval >= 2
             }
-            else {
-                return false
-            }
-        } else {
-            return false
         }
+        return false
     }
+    
+    var title: String {
 
     func title()->String {
         if self.messages.count != 0 {
