@@ -9,9 +9,8 @@
 import Foundation
 import UIKit
 
-class LoginViewController : UIViewController, FBLoginViewDelegate {
+class LoginViewController : UIViewController {
     
-    @IBOutlet weak var fbLoginView : FBLoginView!
     @IBOutlet weak var pageLabel: UILabel!
     @IBOutlet weak var pageImage: UIImageView!
     var pageIndex: Int!
@@ -20,9 +19,6 @@ class LoginViewController : UIViewController, FBLoginViewDelegate {
     var imageString : String!
     
     override func viewDidLoad() {
-        super.viewDidLoad()
-        self.fbLoginView.delegate = self
-        self.fbLoginView.readPermissions = ["public_profile", "email", "user_friends"]
         if color == nil {
             color = "Red"
         }
@@ -37,51 +33,7 @@ class LoginViewController : UIViewController, FBLoginViewDelegate {
         pageImage.image = UIImage(named: imageString!)
         
     }
-    
 
-    
-    func loginViewShowingLoggedInUser(loginView : FBLoginView!) {
-        println("User Logged In")
-        let vc = self.storyboard?.instantiateViewControllerWithIdentifier("RootNavigationController") as UINavigationController
-        presentViewController(vc, animated: true, completion: {
-        
-            // Push notification settings being set and request from user being fired
-            var types: UIUserNotificationType = UIUserNotificationType.Badge | UIUserNotificationType.Alert | UIUserNotificationType.Sound
-            var settings: UIUserNotificationSettings = UIUserNotificationSettings( forTypes: types, categories: nil )
-            UIApplication.sharedApplication().registerUserNotificationSettings(settings)
-            UIApplication.sharedApplication().registerForRemoteNotifications()
-        })
-    }
-    
-    func loginViewFetchedUserInfo(loginView : FBLoginView!, user: FBGraphUser){
-
-        let fbId = user.objectID as String
-        if myUserId() == nil {
-            FBRequestConnection.startForMeWithCompletionHandler{(connection, user, error) -> Void in
-                println("Adding user")
-                let email = user.objectForKey("email") as String
-                // new User object
-                var newUser = User.syncer.newObj()
-                newUser.id = 0
-                newUser.username = user.name
-                newUser.facebookObjectId = fbId
-                newUser.isMe = 1
-                newUser.email = email
-                User.syncer.save()
-                User.syncer.sync()
-            }
-        }
-    }
-    
-    func loginViewShowingLoggedOutUser(loginView : FBLoginView!) {
-        println(UIScreen.mainScreen().bounds)
-        println("User Logged Out")
-    }
-    
-    func loginView(loginView : FBLoginView!, handleError:NSError) {
-        println("Error: \(handleError.localizedDescription)")
-    }
-    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         

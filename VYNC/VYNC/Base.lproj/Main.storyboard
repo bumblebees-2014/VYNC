@@ -266,12 +266,12 @@
                 <pageViewController storyboardIdentifier="PageViewController" autoresizesArchivedViewToFullSize="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="qJT-ZG-h8y" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RqP-g6-Jcf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2181" y="-892"/>
+            <point key="canvasLocation" x="-2411" y="-1232"/>
         </scene>
-        <!--Login Page View Controller-->
+        <!--Facebook View Controller-->
         <scene sceneID="2I9-EZ-HCA">
             <objects>
-                <viewController storyboardIdentifier="LoginPageViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="aa4-Rb-38o" customClass="LoginPageViewController" customModule="VYNC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LoginPageViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="aa4-Rb-38o" customClass="FacebookViewController" customModule="VYNC" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="q4k-YJ-fkO"/>
                         <viewControllerLayoutGuide type="bottom" id="k5H-df-vAe"/>
@@ -279,12 +279,37 @@
                     <view key="view" contentMode="scaleToFill" id="2Co-IP-OvO">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <subviews>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="N6Z-2O-UBe">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="537"/>
+                                <connections>
+                                    <segue destination="ugw-0c-ndB" kind="embed" id="QOl-uC-JO2"/>
+                                </connections>
+                            </containerView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jkc-rF-YS5" customClass="FBLoginView">
+                                <rect key="frame" x="23" y="550" width="274" height="10"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Jkc-rF-YS5" firstAttribute="centerX" secondItem="N6Z-2O-UBe" secondAttribute="centerX" id="0lD-bA-r3F"/>
+                            <constraint firstItem="Jkc-rF-YS5" firstAttribute="top" secondItem="N6Z-2O-UBe" secondAttribute="bottom" constant="13" id="6MS-Sg-Jzg"/>
+                            <constraint firstItem="Jkc-rF-YS5" firstAttribute="leading" secondItem="2Co-IP-OvO" secondAttribute="leadingMargin" constant="7" id="DWw-YN-fwT"/>
+                            <constraint firstAttribute="trailing" secondItem="N6Z-2O-UBe" secondAttribute="trailing" id="JDQ-xp-kkw"/>
+                            <constraint firstItem="Jkc-rF-YS5" firstAttribute="top" secondItem="2Co-IP-OvO" secondAttribute="top" constant="550" id="Jn4-WL-DWA"/>
+                            <constraint firstItem="N6Z-2O-UBe" firstAttribute="top" secondItem="2Co-IP-OvO" secondAttribute="top" id="cG9-fu-IMi"/>
+                            <constraint firstItem="N6Z-2O-UBe" firstAttribute="leading" secondItem="2Co-IP-OvO" secondAttribute="leading" id="fSl-kj-ISe"/>
+                            <constraint firstItem="k5H-df-vAe" firstAttribute="top" secondItem="Jkc-rF-YS5" secondAttribute="bottom" constant="8" symbolic="YES" id="hR2-q0-28F"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="fbLoginView" destination="Jkc-rF-YS5" id="8MJ-Xo-9eh"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uGP-rX-Emg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1771" y="-581"/>
+            <point key="canvasLocation" x="-2184" y="-615"/>
         </scene>
         <!--Login-->
         <scene sceneID="8r7-vT-h33">
@@ -324,21 +349,10 @@
                                 <color key="textColor" red="0.45098039220000002" green="0.63137254899999995" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mD9-yz-ohL" customClass="FBLoginView">
-                                <rect key="frame" x="60" y="434" width="200" height="54"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="200" id="LfO-S0-rgf"/>
-                                    <constraint firstAttribute="height" constant="54" id="rJN-Ug-Bva"/>
-                                </constraints>
-                            </view>
                         </subviews>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="p6A-ob-dlB" firstAttribute="top" secondItem="NAu-P5-pd9" secondAttribute="bottom" constant="9" id="4Aa-2b-w5v"/>
-                            <constraint firstAttribute="centerX" secondItem="mD9-yz-ohL" secondAttribute="centerX" id="5yl-nJ-1A7"/>
                             <constraint firstItem="NAu-P5-pd9" firstAttribute="top" secondItem="1N0-Jk-LR8" secondAttribute="top" id="FF9-zi-lxZ"/>
-                            <constraint firstItem="mD9-yz-ohL" firstAttribute="top" secondItem="fqs-eV-oIL" secondAttribute="bottom" constant="8" id="FJv-2s-jsE"/>
                             <constraint firstAttribute="centerX" secondItem="p6A-ob-dlB" secondAttribute="centerX" id="FqQ-Zg-kXw"/>
                             <constraint firstAttribute="centerX" secondItem="NAu-P5-pd9" secondAttribute="centerX" constant="-0.5" id="ezz-q3-j7d"/>
                             <constraint firstAttribute="centerX" secondItem="fqs-eV-oIL" secondAttribute="centerX" id="km9-bh-ihm"/>
@@ -347,14 +361,13 @@
                     </view>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                     <connections>
-                        <outlet property="fbLoginView" destination="mD9-yz-ohL" id="bVL-X0-gFM"/>
                         <outlet property="pageImage" destination="fqs-eV-oIL" id="9zN-oc-RSS"/>
                         <outlet property="pageLabel" destination="p6A-ob-dlB" id="rBD-u7-4lK"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="b62-UR-IBy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1828" y="-1273"/>
+            <point key="canvasLocation" x="-1736" y="-1333"/>
         </scene>
         <!--RootNavigationController-->
         <scene sceneID="LQm-Nx-EDq">
@@ -483,6 +496,25 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HQg-uh-Gr4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1394" y="964"/>
+        </scene>
+        <!--Login Page View Controller-->
+        <scene sceneID="Pnk-li-pHj">
+            <objects>
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="ugw-0c-ndB" customClass="LoginPageViewController" customModule="VYNC" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="4t6-DZ-DRj"/>
+                        <viewControllerLayoutGuide type="bottom" id="qk9-qF-ejD"/>
+                    </layoutGuides>
+                    <view key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="q5m-LN-TQM">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="537"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <toolbarItems/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="uuw-FV-cbe" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1831" y="-666"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
