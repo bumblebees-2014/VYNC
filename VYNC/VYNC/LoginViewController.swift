@@ -23,11 +23,11 @@ class LoginViewController : UIViewController {
             color = "Red"
         }
         if color == "Red" {
-            self.view.backgroundColor = UIColor.VYNCTeal()
+            self.view.backgroundColor = UIColor.VTeal()
         } else if color == "Green" {
-            self.view.backgroundColor = UIColor.VYNCBlue()
+            self.view.backgroundColor = UIColor.VBlue()
         } else if color == "Blue" {
-            self.view.backgroundColor = UIColor.VYNCPink()
+            self.view.backgroundColor = UIColor.VPink()
         }
         pageLabel.text = titleString!
         pageImage.image = UIImage(named: imageString!)
