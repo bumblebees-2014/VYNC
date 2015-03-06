@@ -46,8 +46,8 @@ class VyncPlayerLayer : AVPlayerLayer {
         self.frame = UIScreen.mainScreen().bounds
         self.videoGravity = AVLayerVideoGravityResizeAspectFill
         timer.frame = CGRectMake(30, 30, 60, 60)
-        self.timer.font = UIFont(name: "Egypt 22", size: 60)
-        self.timer.foregroundColor = UIColor(netHex:0x73A1FF).CGColor
+        self.timer.font = UIFont.VEgypt()
+        self.timer.foregroundColor = UIColor.VBlue().CGColor
         self.timer.fontSize = 60
         timer.string = ""
         self.addSublayer(timer)

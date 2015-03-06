@@ -44,12 +44,11 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
     
     func setupButtons(){
         // Set the font of nav bar title
-        let color = UIColor(netHex:0x73A1FF)
-        let font = [NSFontAttributeName: UIFont(name: "Egypt 22", size: 50)!, NSForegroundColorAttributeName: color]
+
+        let font = [NSFontAttributeName: UIFont.VEgypt(), NSForegroundColorAttributeName: UIColor.VBlue()]
         self.navigationController!.navigationBar.titleTextAttributes = font
         // Set the font of nav bar item
-        let buttonColor = UIColor(netHex:0x7FF2FF)
-        let buttonFont = [NSFontAttributeName: UIFont(name: "flaticon", size: 28)!, NSForegroundColorAttributeName: buttonColor]
+        let buttonFont = [NSFontAttributeName: UIFont(name: "flaticon", size: 28)!, NSForegroundColorAttributeName: UIColor.VTeal()]
         showStatsButton.setTitleTextAttributes(buttonFont, forState: .Normal)
         showStatsButton.title = "\u{e004}"
         cameraButton.setTitleTextAttributes(buttonFont, forState: .Normal)
@@ -161,7 +160,7 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
                 title: "FORWARD",
                 handler: replyClosure
             )
-            reply.backgroundColor = UIColor(netHex: 0xFFB5C9)
+            reply.backgroundColor = UIColor.VPink()
             return [reply]
         } else {
             let delete = UITableViewRowAction(

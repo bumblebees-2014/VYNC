@@ -56,13 +56,13 @@ class VyncCell: UITableViewCell, UIGestureRecognizerDelegate {
             lengthLabel.textColor = UIColor.whiteColor()
             subTitle.text = "\(vync.date) - Swipe to Delete"
         } else if vync.waitingOnYou {
-            statusLogo.textColor = UIColor(netHex:0xFFB5C9)
-            lengthLabel.backgroundColor = UIColor(netHex:0xFFB5C9)
+            statusLogo.textColor = UIColor.VPink()
+            lengthLabel.backgroundColor = UIColor.VPink()
             subTitle.text = "\(vync.date) - Swipe to Reply"
         } else {
             subTitle.text = "\(vync.date) - Hold to Play"
-            statusLogo.textColor = UIColor(netHex:0x7FF2FF)
-            lengthLabel.backgroundColor = UIColor(netHex:0x7FF2FF)
+            statusLogo.textColor = UIColor.VTeal()
+            lengthLabel.backgroundColor = UIColor.VTeal()
         }
         // Unwatched vyncs get a flame
         if vync.unwatched {
