@@ -139,7 +139,7 @@ class VyncCameraViewController: UIViewController, AVCaptureFileOutputRecordingDe
     
     @IBAction func startRecording(sender: AnyObject) {
         println("startRecording")
-        let filePath = videoFolder + "/videoToSend.MOV"
+        let filePath = videoFolder + "/videoToSend.mov"
         let fileUrl = NSURL.fileURLWithPath(filePath) as NSURL!
         captureMovieFileOutput!.startRecordingToOutputFileURL(fileUrl, recordingDelegate: self)
         rotating = true
