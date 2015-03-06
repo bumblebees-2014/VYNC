@@ -85,6 +85,16 @@ class AR<T : NSManagedObject> {
         return self
     }
     
+    func findBy(format:String, arg:AnyObject) ->T? {
+        req.predicate = NSPredicate(format: format, argumentArray: [arg])
+        if let query = self.limit(1).exec() {
+            if let first = query.first as T! {
+                return first
+            }
+        }
+        return nil
+    }
+    
     func find(id:Int) ->T? {
         if let query = filter("id == %@", args: id).limit(1).exec() {
             if let first = query.first as T! {
