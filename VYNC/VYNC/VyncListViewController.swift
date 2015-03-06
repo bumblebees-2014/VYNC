@@ -21,7 +21,7 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
     var refreshControl:UIRefreshControl!
     var vyncs = VideoMessage.asVyncs()
     var deadVyncs = VideoMessage.deadVyncs()
-    var lastPlayed : Int? = nil
+    var lastPlayed : NSIndexPath?
     var videoLayer = VyncPlayerLayer()
     
     override func viewDidLoad() {
@@ -207,7 +207,7 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
                 let index = indexPath.row as Int
                 let vync = array[index]
                 if vync.isSaved {
-                    if index != self.lastPlayed {
+                    if indexPath != self.lastPlayed {
                         self.videoLayer.player = nil
                         let items = array[index].videoItems()
                         var loopPlayer = AVQueueLoopPlayer(items: items)
@@ -216,7 +216,7 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
                         loopPlayer.layer = self.videoLayer
                         vync.markAsWatched()
                         updateView()
-                        self.lastPlayed = index
+                        self.lastPlayed = indexPath
                     }
                     self.navigationController?.view.layer.addSublayer(self.videoLayer)
                     self.videoLayer.playVideos()
