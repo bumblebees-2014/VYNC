@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 
 class MyStatsViewController : UIViewController, UITextFieldDelegate {
+    @IBOutlet weak var profilePicture: FBProfilePictureView!
 
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var numVyncsSent: UILabel!
@@ -17,6 +18,7 @@ class MyStatsViewController : UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        profilePicture.profileID = User.myFacebookId()
         name.text = User.me().username
         let sent = VideoMessage.syncer.all().filter("senderId == %@", args: User.myUserId()!).exec()!
         let recieved = VideoMessage.syncer.all().filter("recipientId == %@", args: User.myUserId()!).exec()!
