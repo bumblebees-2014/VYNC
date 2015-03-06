@@ -64,10 +64,10 @@ class ContactsViewController: UIViewController, UITableViewDelegate, UITableView
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let recipientId = contacts[indexPath.row].id
-        
-        let data = NSData(contentsOfFile: pathToFile)
+        let filePath = videoFolder + "/videoToSend.mov"
+        let data = NSData(contentsOfFile: filePath)
         let videoId = NSUUID().UUIDString + ".mov"
-        let newFilePath = docFolderToSaveFiles + "/" + videoId
+        let newFilePath = videoFolder + "/" + videoId
         data?.writeToFile(newFilePath, atomically: true)
         
         if self.replyToId != 0 {

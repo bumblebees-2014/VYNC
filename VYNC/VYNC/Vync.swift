@@ -95,17 +95,21 @@ struct Vync {
     }
     
     func videoItems()->[AVPlayerItem]{
-        if waitingOnYou {
+        if waitingOnYou && !isDead {
             let firstMessage = self.messages.first!
-            let firstMessageUrl = NSURL.fileURLWithPath(docFolderToSaveFiles + "/" + firstMessage.videoId!) as NSURL!
+            let firstMessageUrl = NSURL.fileURLWithPath(videoFolder + "/" + firstMessage.videoId!) as NSURL!
             let firstItem = AVPlayerItem(URL: firstMessageUrl)
-            let standinItem = AVPlayerItem(URL: standin)
+
+            let standinPath = NSBundle.mainBundle().pathForResource("VYNC", ofType:"mov")!
+            let standinURL = NSURL.fileURLWithPath(standinPath)
+            let standinItem = AVPlayerItem(URL: standinURL)
+            
             return [firstItem, standinItem]
             
         } else {
             return self.messages.map({
                 message in
-                AVPlayerItem(URL: (NSURL.fileURLWithPath(docFolderToSaveFiles + "/" + message.videoId!) as NSURL!))
+                AVPlayerItem(URL: (NSURL.fileURLWithPath(videoFolder + "/" + message.videoId!) as NSURL!))
             })
         }
     }
@@ -140,7 +144,7 @@ struct Vync {
     func delete() {
         let fm = NSFileManager()
         for message in self.messages {
-            let localUrlString = "\(docFolderToSaveFiles)/\(message.videoId!)"
+            let localUrlString = videoFolder + "/" + message.videoId!
             fm.removeItemAtPath(localUrlString, error: nil)
             VideoMessage.syncer.delete(message)
         }

@@ -65,10 +65,11 @@ class VideoMessage: NSManagedObject {
     }
     
     class func saveTheseVids(videos: [VideoMessage] ,completion: (Void -> Void) = {}) {
+        let s3Url = "https://s3-us-west-2.amazonaws.com/telephono/"
         let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
         dispatch_async(dispatch_get_global_queue(priority, 0)) {
             for message in videos {
-                let localUrlString = "\(docFolderToSaveFiles)/\(message.videoId!)"
+                let localUrlString = videoFolder + "/" + message.videoId!
                 let localUrl = NSURL(fileURLWithPath: localUrlString) as NSURL!
                 let cloudUrl = NSURL(string: s3Url + message.videoId!) as NSURL!
                 let localData = NSData(contentsOfURL: localUrl)
@@ -99,10 +100,11 @@ class VideoMessage: NSManagedObject {
         if vids.count == 0 {
             completion()
         }
+        let s3Url = "https://s3-us-west-2.amazonaws.com/telephono/"
         let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
         dispatch_async(dispatch_get_global_queue(priority, 0)) {
             for message in vids {
-                let localUrlString = "\(docFolderToSaveFiles)/\(message.videoId!)"
+                let localUrlString = videoFolder + "/" + message.videoId!
                 let localUrl = NSURL(fileURLWithPath: localUrlString) as NSURL!
                 let localData = NSData(contentsOfURL: localUrl)
                 if localData?.length == nil {
