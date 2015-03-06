@@ -35,7 +35,7 @@ class FacebookViewController : UIViewController, FBLoginViewDelegate {
     func loginViewFetchedUserInfo(loginView : FBLoginView!, user: FBGraphUser){
         
         let fbId = user.objectID as String
-        if myUserId() == nil {
+        if User.myUserId() == nil {
             FBRequestConnection.startForMeWithCompletionHandler{(connection, user, error) -> Void in
                 println("Adding user")
                 let email = user.objectForKey("email") as String

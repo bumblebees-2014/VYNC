@@ -27,34 +27,5 @@ let host = "https://vync-api.herokuapp.com" //"http://192.168.0.6:9393"
 var deviceToken = ""
 
 
-public func signedUp()->Bool{
-    if let user = User.syncer.all().filter("isMe == %@", args: 1).exec()?.first as User! {
-        return true
-    } else {
-        return false
-    }
-}
 
-func myUserId()->Int?{
-    if let me = User.syncer.all().filter("isMe == %@", args: 1).exec()!.first as User! {
-        return me.id as? Int
-        
-    } else {
-        return nil
-    }
-}
-
-func me()->User{
-    return User.syncer.all().filter("isMe == %@", args: 1).exec()!.first as User!
-}
-
-func myFacebookId()->String{
-    if let me = User.syncer.all().filter("isMe == %@", args: 1).exec()!.first as User! {
-        return me.facebookObjectId as String
-        
-    } else {
-        return ""
-    }
-    
-}
 

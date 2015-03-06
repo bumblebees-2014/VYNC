@@ -22,7 +22,7 @@ struct Vync {
     }
     var waitingOnYou: Bool {
         if let mostRecentRecipient = self.messages.first {
-            return myUserId() == mostRecentRecipient.recipientId
+            return User.myUserId() == mostRecentRecipient.recipientId
         } else {
             return false
         }

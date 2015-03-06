@@ -27,7 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FBProfilePictureView.self
         Fabric.with([Crashlytics()])
         application.setStatusBarStyle(UIStatusBarStyle.BlackOpaque, animated: false)
-        if signedUp() == false {
+        if User.signedUp() == false {
             self.window = UIWindow()
             self.window?.frame = UIScreen.mainScreen().bounds
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -56,7 +56,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             .stringByTrimmingCharactersInSet( characterSet )
             .stringByReplacingOccurrencesOfString( " ", withString: "" ) as String
         var request = HTTPTask()
-        request.PUT(host+"/users/" + myFacebookId(),
+        request.PUT(host+"/users/" + User.myFacebookId(),
             parameters: ["device_token": deviceToken],
             success: {(response: HTTPResponse) in
                 if let data = response.responseObject as? NSData {

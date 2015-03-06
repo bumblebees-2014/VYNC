@@ -16,7 +16,7 @@ func remDupeInts(a:[Int]) -> [Int] {
 class VideoMessage: NSManagedObject {
     
     class var syncer : Syncer<VideoMessage> {
-        return Syncer<VideoMessage>(url: host + "/users/\(myFacebookId())/videos")
+        return Syncer<VideoMessage>(url: host + "/users/\(User.myFacebookId())/videos")
     }
     
     @NSManaged var id: NSNumber?

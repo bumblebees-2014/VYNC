@@ -79,7 +79,7 @@ class ContactsViewController: UIViewController, UITableViewDelegate, UITableView
             newMessage.videoId = videoId
             newMessage.replyToId = replyToId
             newMessage.recipientId = recipientId
-            newMessage.senderId = myUserId()
+            newMessage.senderId = User.myUserId()
             newMessage.title = ""
             newMessage.saved = 1
             VideoMessage.syncer.save()
@@ -91,7 +91,7 @@ class ContactsViewController: UIViewController, UITableViewDelegate, UITableView
             // but what if you have more than one 0? This is broken as is.
             newMessage.replyToId = 0
             newMessage.recipientId = recipientId
-            newMessage.senderId = myUserId()
+            newMessage.senderId = User.myUserId()
             newMessage.title = self.vyncTitle!
             newMessage.saved = 1
             VideoMessage.syncer.save()
