@@ -23,8 +23,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch
-        FBLoginView.self
-        FBProfilePictureView.self
         Fabric.with([Crashlytics()])
         application.setStatusBarStyle(UIStatusBarStyle.BlackOpaque, animated: false)
         if User.signedUp() == false {
@@ -36,12 +34,37 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.window?.makeKeyAndVisible()
 
         } else {
+            let readPermissions = ["public_profile", "email", "user_friends"]
+            FBSession.openActiveSessionWithReadPermissions(readPermissions, allowLoginUI: false, completionHandler: {
+                (session: FBSession!, state: FBSessionState, error: NSError!) -> Void in
+                if state == FBSessionState.Open {
+                    println("Logged In")
+
+                    FBRequestConnection.startForMyFriendsWithCompletionHandler({
+                        (connection, result, error: NSError!) -> Void in
+                        if error == nil {
+                            if let resultDict = result as? NSDictionary {
+                                let friends = resultDict.valueForKey("data") as [NSDictionary]
+                                println(friends)
+                                // Using facebookObjectId as a marker for friends. May later implement separate isFriend boolean
+                                for friend in friends {
+                                    if let id = friend.valueForKey("id") as? String {
+                                        if let match = User.syncer.all().findBy("facebookObjectId == %@", arg: id) as User! {
+                                            println("Matched!")
+                                            User.syncer.save()
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    })
+                }
+            })
             application.registerForRemoteNotifications()
             VideoMessage.syncer.sync()
-//            VideoMessage.saveNewVids()
+            VideoMessage.saveNewVids()
             User.syncer.sync()
         }
-
         return true
     }
 
