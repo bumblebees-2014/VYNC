@@ -158,16 +158,11 @@
 		4836638E1A7535C40096AE64 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				4875B31F1A6C79B50030AABD /* VyncListViewController.swift */,
-				481AF25A1A706B5F0018B887 /* VyncCell.swift */,
-				48F119391A784CCD00A02828 /* QueueLoopVideoPlayer.swift */,
+				487215221AA9D13D00149EDA /* VYNCTable */,
+				487215211AA9D11C00149EDA /* Camera */,
+				487215201AA9D10800149EDA /* Login */,
 				483663981A75A80E0096AE64 /* ContactsViewController.swift */,
-				48BAECD81A782897005CC762 /* VyncCameraViewController.swift */,
-				48F1193B1A78605D00A02828 /* PlaybackOverlay.swift */,
-				4846BCC21A810DA200FC489C /* LoginViewController.swift */,
-				489105F91A9B726F00DDA009 /* LoginPageViewController.swift */,
 				489A9A051A8CFBA000902CC9 /* MyStatsViewController.swift */,
-				483A155F1AA9139800FBFD01 /* FacebookViewController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -182,15 +177,44 @@
 			name = Views_And_Layers;
 			sourceTree = "<group>";
 		};
+		487215201AA9D10800149EDA /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				4846BCC21A810DA200FC489C /* LoginViewController.swift */,
+				489105F91A9B726F00DDA009 /* LoginPageViewController.swift */,
+				483A155F1AA9139800FBFD01 /* FacebookViewController.swift */,
+			);
+			name = Login;
+			sourceTree = "<group>";
+		};
+		487215211AA9D11C00149EDA /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				48BAECD81A782897005CC762 /* VyncCameraViewController.swift */,
+				48F1193B1A78605D00A02828 /* PlaybackOverlay.swift */,
+			);
+			name = Camera;
+			sourceTree = "<group>";
+		};
+		487215221AA9D13D00149EDA /* VYNCTable */ = {
+			isa = PBXGroup;
+			children = (
+				4875B31F1A6C79B50030AABD /* VyncListViewController.swift */,
+				481AF25A1A706B5F0018B887 /* VyncCell.swift */,
+				48F119391A784CCD00A02828 /* QueueLoopVideoPlayer.swift */,
+			);
+			name = VYNCTable;
+			sourceTree = "<group>";
+		};
 		4875B2EE1A6C79760030AABD = {
 			isa = PBXGroup;
 			children = (
 				4808922D1A79A1240050F230 /* VYNC.xcdatamodeld */,
-				48CE912C1A9F7312004B6271 /* Crashlytics.framework */,
-				48CE912D1A9F7312004B6271 /* Fabric.framework */,
 				4875B2F91A6C79760030AABD /* VYNC */,
 				4875B3121A6C79760030AABD /* VYNCTests */,
 				4875B2F81A6C79760030AABD /* Products */,
+				48CE912C1A9F7312004B6271 /* Crashlytics.framework */,
+				48CE912D1A9F7312004B6271 /* Fabric.framework */,
 				976D457E1A8129A200E6606F /* FacebookSDK.framework */,
 			);
 			sourceTree = "<group>";

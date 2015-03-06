@@ -9,9 +9,6 @@
 import Foundation
 import CoreData
 
-func remDupeInts(a:[Int]) -> [Int] {
-    return a.reduce([Int]()) { ac, x in contains(ac, x) ? ac : ac + [x] }
-}
 @objc(VideoMessage)
 class VideoMessage: NSManagedObject {
     
@@ -31,13 +28,13 @@ class VideoMessage: NSManagedObject {
     @NSManaged var saved: NSNumber?
     
     class func allVyncs()->[Vync]{
-        let allVideos = self.syncer.all().filter("id != 0").sortBy("id", ascending: false).exec()!
-        let replyTos = allVideos.map({video in Int(video.replyToId!)})
-        var uniqReplyTos = remDupeInts(replyTos)
-        var vyncs = [Vync]()
-        for id in uniqReplyTos {
+        let allReplyTos = self.syncer.all().filter("id != 0").sortBy("id", ascending: false).uniq().pluck("replyToId")!
+        var vyncs = allReplyTos.reduce([Vync](), combine: {
+            initial, replyTo in
+            let dict = replyTo as NSDictionary
+            let id = dict.valueForKey("replyToId") as NSNumber
+            println(id)
             var messages = VideoMessage.syncer.all().filter("replyToId == %@", args: id).sortBy("id", ascending: false).exec()!
-            // Deal with videos that haven't yet been uploaded
             if let lastMessage = messages.last as VideoMessage! {
                 if lastMessage.id == 0 {
                     let lastMessage = messages.last
@@ -45,10 +42,9 @@ class VideoMessage: NSManagedObject {
                     messages.insert(lastMessage!, atIndex: 0)
                 }
             }
-            let newVync = Vync(messages: messages)
-            vyncs.append(newVync)
-        }
-        // not yet uploaded, new thread:
+            return initial + [Vync(messages: messages)]
+        })
+        // Handle New Threads That Haven't Been Uploaded
         let newVideos = self.syncer.all().filter("id == 0 AND replyToId == 0").exec()!
         for video in newVideos {
             vyncs.insert(Vync(messages: [video]), atIndex: 0)
@@ -95,37 +91,19 @@ class VideoMessage: NSManagedObject {
         }
     }
     
-    class func saveNewVids(completion:(()->()) = {}) {
-        let vids = self.syncer.all().filter("saved == nil OR saved == 0").exec()!
+    class func saveNewVids(completion:(Void->Void) = {}) {
+        // Only save vids that are active. Dead vyncs can be saved on demand.
+        let vids = asVyncs().reduce([VideoMessage](), combine: {
+            array, vync in
+            if !vync.isSaved {
+                return array + vync.messages
+            } else {
+                return array
+            }
+        })
         if vids.count == 0 {
             completion()
         }
-        let s3Url = "https://s3-us-west-2.amazonaws.com/telephono/"
-        let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
-        dispatch_async(dispatch_get_global_queue(priority, 0)) {
-            for message in vids {
-                let localUrlString = videoFolder + "/" + message.videoId!
-                let localUrl = NSURL(fileURLWithPath: localUrlString) as NSURL!
-                let localData = NSData(contentsOfURL: localUrl)
-                if localData?.length == nil {
-                    let cloudUrl = NSURL(string: s3Url + message.videoId!) as NSURL!
-                    let data = NSData(contentsOfURL: cloudUrl)
-                    data?.writeToFile(localUrlString, atomically: true)
-                    println("saved video \(message.id) to core data")
-                    message.saved = 1
-                    message.watched = 0
-                    self.syncer.save()
-                } else {
-                    println("already there")
-                    message.saved = 1
-                    self.syncer.save()
-                }
-            }
-            dispatch_async(dispatch_get_main_queue()) {
-                // update some UI using completion callback
-                println("back on the main thread")
-                completion()
-            }
-        }
+        saveTheseVids(vids, completion: completion)
     }
 }

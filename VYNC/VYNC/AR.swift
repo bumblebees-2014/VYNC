@@ -40,7 +40,7 @@ class AR<T : NSManagedObject> {
         let entityName = getName(T)
         self.req = NSFetchRequest()
         self.req.entity = NSEntityDescription.entityForName(entityName, inManagedObjectContext: self.db!)
-        self.req.propertiesToFetch = req.entity?.properties
+//        self.req.propertiesToFetch = req.entity?.properties
     }
     
     func sortBy(key: String, ascending: Bool) -> AR<T> {
@@ -57,6 +57,23 @@ class AR<T : NSManagedObject> {
         return self
     }
     
+    func uniq() -> AR<T> {
+        req.returnsDistinctResults = true
+        return self
+    }
+    
+    func pluck(property:String) -> [AnyObject]? {
+        req.resultType = NSFetchRequestResultType.DictionaryResultType
+        let props = NSArray(array: [property])
+        
+        req.propertiesToFetch = props
+        var error: NSError?
+        if let results = db!.executeFetchRequest(req, error: &error) as [AnyObject]! {
+            return results
+        }
+        return nil
+    }
+    
     func exec() -> [T]? {
         var error: NSError?
         if let results = db!.executeFetchRequest(req, error: &error) as? [T] {
@@ -70,7 +87,7 @@ class AR<T : NSManagedObject> {
         return self
     }
     
-    func find(id:Int)->T? {
+    func find(id:Int) ->T? {
         if let query = filter("id == %@", args: id).limit(1).exec() {
             if let first = query.first as T! {
                 return first
