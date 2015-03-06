@@ -83,6 +83,8 @@ class VyncCell: UITableViewCell, UIGestureRecognizerDelegate {
             titleLabel.transform = CGAffineTransformMakeTranslation(0, -10)
             subTitle.text = "Tap to download"
         } else {
+            titleLabel.transform = CGAffineTransformMakeTranslation(0, 0)
+            subTitle.textColor = UIColor.clearColor()
             contentView.layer.borderWidth = 0.0
             lengthLabel.layer.borderWidth = 0.0
         }

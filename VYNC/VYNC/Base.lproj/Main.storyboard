@@ -40,19 +40,23 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pT4-Sm-Aeg" customClass="FBProfilePictureView">
-                                            <rect key="frame" x="8" y="12" width="58" height="56"/>
+                                            <rect key="frame" x="4" y="12" width="58" height="56"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="56" id="dM8-bw-XAD"/>
+                                                <constraint firstAttribute="width" constant="58" id="sMM-yJ-PD6"/>
+                                            </constraints>
                                         </view>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8Vm-69-WIq">
                                             <rect key="frame" x="273" y="24" width="40" height="34"/>
                                             <constraints>
-                                                <constraint firstAttribute="width" constant="40" id="eaX-oP-nao"/>
+                                                <constraint firstAttribute="width" constant="40" id="OYh-RL-gqn"/>
                                             </constraints>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="username" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PcK-Qw-Ivu">
                                             <rect key="frame" x="73" y="29" width="192" height="21"/>
                                             <constraints>
-                                                <constraint firstAttribute="width" constant="192" id="DK0-Rf-JUY"/>
+                                                <constraint firstAttribute="width" constant="192" id="9sB-na-b5O"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -60,16 +64,16 @@
                                         </label>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstAttribute="bottomMargin" secondItem="pT4-Sm-Aeg" secondAttribute="bottom" constant="6" id="0cl-x7-9GA"/>
-                                        <constraint firstItem="pT4-Sm-Aeg" firstAttribute="leading" secondItem="2xE-Z5-Gv9" secondAttribute="leadingMargin" id="4ba-M5-CwX"/>
-                                        <constraint firstItem="PcK-Qw-Ivu" firstAttribute="leading" secondItem="pT4-Sm-Aeg" secondAttribute="trailing" constant="7" id="E2f-8f-Rox"/>
-                                        <constraint firstItem="pT4-Sm-Aeg" firstAttribute="leading" secondItem="2xE-Z5-Gv9" secondAttribute="leadingMargin" id="IBS-oy-50b"/>
-                                        <constraint firstItem="8Vm-69-WIq" firstAttribute="centerY" secondItem="2xE-Z5-Gv9" secondAttribute="centerY" id="NCx-Nr-xEs"/>
-                                        <constraint firstItem="PcK-Qw-Ivu" firstAttribute="top" secondItem="2xE-Z5-Gv9" secondAttribute="topMargin" constant="21" id="dWT-UJ-zmJ"/>
-                                        <constraint firstItem="8Vm-69-WIq" firstAttribute="top" secondItem="2xE-Z5-Gv9" secondAttribute="topMargin" constant="16" id="ffy-oL-aRq"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="8Vm-69-WIq" secondAttribute="trailing" constant="-1" id="gBf-2V-DUg"/>
-                                        <constraint firstItem="8Vm-69-WIq" firstAttribute="leading" secondItem="PcK-Qw-Ivu" secondAttribute="trailing" constant="8" symbolic="YES" id="pRx-vP-ObU"/>
-                                        <constraint firstItem="pT4-Sm-Aeg" firstAttribute="top" secondItem="2xE-Z5-Gv9" secondAttribute="topMargin" constant="4" id="pm4-Gb-scA"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="pT4-Sm-Aeg" secondAttribute="bottom" constant="6" id="KGA-wt-O4t"/>
+                                        <constraint firstItem="pT4-Sm-Aeg" firstAttribute="leading" secondItem="2xE-Z5-Gv9" secondAttribute="leadingMargin" constant="-4" id="hxv-sv-bcc"/>
+                                        <constraint firstItem="8Vm-69-WIq" firstAttribute="leading" secondItem="PcK-Qw-Ivu" secondAttribute="trailing" constant="8" id="iUZ-ZP-5da"/>
+                                        <constraint firstItem="PcK-Qw-Ivu" firstAttribute="leading" secondItem="pT4-Sm-Aeg" secondAttribute="trailing" constant="11" id="lhi-YN-F49"/>
+                                        <constraint firstItem="pT4-Sm-Aeg" firstAttribute="top" secondItem="2xE-Z5-Gv9" secondAttribute="topMargin" constant="4" id="mgJ-Nz-Vsy"/>
+                                        <constraint firstItem="8Vm-69-WIq" firstAttribute="top" secondItem="2xE-Z5-Gv9" secondAttribute="topMargin" constant="16" id="nji-fG-ilb"/>
+                                        <constraint firstItem="PcK-Qw-Ivu" firstAttribute="top" secondItem="2xE-Z5-Gv9" secondAttribute="topMargin" constant="21" id="oBs-Yx-5bP"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="8Vm-69-WIq" secondAttribute="bottom" constant="16" id="qY6-aq-tiZ"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="PcK-Qw-Ivu" secondAttribute="bottom" constant="24" id="wsB-sd-U16"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="8Vm-69-WIq" secondAttribute="trailing" constant="-1" id="xZR-g3-Tsw"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>

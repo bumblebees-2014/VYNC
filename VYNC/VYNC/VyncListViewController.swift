@@ -19,8 +19,8 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
     @IBOutlet weak var cameraButton: UIBarButtonItem!
     
     var refreshControl:UIRefreshControl!
-    var vyncs = VideoMessage.asVyncs()
-    var deadVyncs = VideoMessage.deadVyncs()
+    var vyncs = [Vync]()
+    var deadVyncs = [Vync]()
     var lastPlayed : NSIndexPath?
     var videoLayer = VyncPlayerLayer()
     
@@ -35,7 +35,6 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
         
         // Sync New Videos
         VideoMessage.syncer.uploadNew() {done in
-            self.updateView()
             VideoMessage.syncer.downloadNew() {done in
                 self.updateView()
             }
