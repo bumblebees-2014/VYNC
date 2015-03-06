@@ -63,6 +63,7 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        self.lastPlayed = nil
         UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: .None)
         updateView()
     }
@@ -76,6 +77,7 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
     
     @IBAction func reloadVyncs() {
         self.refreshControl.beginRefreshing()
+        self.lastPlayed = nil
         VideoMessage.syncer.uploadNew() {done in
             VideoMessage.syncer.downloadNew() {done in
                 VideoMessage.saveNewVids() {done in
