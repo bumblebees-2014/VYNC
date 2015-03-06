@@ -29,7 +29,7 @@ struct Vync {
     }
     
     var isSaved: Bool {
-        return messages.filter({video in video.saved == 0}).count == 0
+        return messages.filter({video in video.saved == 1}).count == messages.count
     }
     
     var unwatched: Bool {
