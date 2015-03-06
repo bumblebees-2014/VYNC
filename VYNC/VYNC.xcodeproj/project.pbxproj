@@ -15,6 +15,7 @@
 		483A15601AA9139800FBFD01 /* FacebookViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 483A155F1AA9139800FBFD01 /* FacebookViewController.swift */; };
 		4846BCC31A810DA200FC489C /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4846BCC21A810DA200FC489C /* LoginViewController.swift */; };
 		4872151F1AA9C88700149EDA /* Fonts+Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4872151E1AA9C88700149EDA /* Fonts+Colors.swift */; };
+		487215321AAA53AE00149EDA /* ContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487215311AAA53AE00149EDA /* ContactCell.swift */; };
 		4875B2FD1A6C79760030AABD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4875B2FC1A6C79760030AABD /* AppDelegate.swift */; };
 		4875B3051A6C79760030AABD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4875B3031A6C79760030AABD /* Main.storyboard */; };
 		4875B3071A6C79760030AABD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4875B3061A6C79760030AABD /* Images.xcassets */; };
@@ -75,6 +76,7 @@
 		483A155F1AA9139800FBFD01 /* FacebookViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FacebookViewController.swift; sourceTree = "<group>"; };
 		4846BCC21A810DA200FC489C /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		4872151E1AA9C88700149EDA /* Fonts+Colors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Fonts+Colors.swift"; sourceTree = "<group>"; };
+		487215311AAA53AE00149EDA /* ContactCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactCell.swift; sourceTree = "<group>"; };
 		4875B2F71A6C79760030AABD /* VYNC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VYNC.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4875B2FB1A6C79760030AABD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4875B2FC1A6C79760030AABD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -161,7 +163,7 @@
 				487215221AA9D13D00149EDA /* VYNCTable */,
 				487215211AA9D11C00149EDA /* Camera */,
 				487215201AA9D10800149EDA /* Login */,
-				483663981A75A80E0096AE64 /* ContactsViewController.swift */,
+				487215301AAA53A000149EDA /* Contacts */,
 				489A9A051A8CFBA000902CC9 /* MyStatsViewController.swift */,
 			);
 			name = ViewControllers;
@@ -204,6 +206,15 @@
 				48F119391A784CCD00A02828 /* QueueLoopVideoPlayer.swift */,
 			);
 			name = VYNCTable;
+			sourceTree = "<group>";
+		};
+		487215301AAA53A000149EDA /* Contacts */ = {
+			isa = PBXGroup;
+			children = (
+				487215311AAA53AE00149EDA /* ContactCell.swift */,
+				483663981A75A80E0096AE64 /* ContactsViewController.swift */,
+			);
+			name = Contacts;
 			sourceTree = "<group>";
 		};
 		4875B2EE1A6C79760030AABD = {
@@ -463,6 +474,7 @@
 				48E9F78A1A7961050034CF5E /* HTTPTask.swift in Sources */,
 				48E9F7881A7960F80034CF5E /* HTTPResponseSerializer.swift in Sources */,
 				4846BCC31A810DA200FC489C /* LoginViewController.swift in Sources */,
+				487215321AAA53AE00149EDA /* ContactCell.swift in Sources */,
 				48BAECD91A782897005CC762 /* VyncCameraViewController.swift in Sources */,
 				48883BA91A71CFD70024F2DA /* HexColor.swift in Sources */,
 				489A9A061A8CFBA000902CC9 /* MyStatsViewController.swift in Sources */,
