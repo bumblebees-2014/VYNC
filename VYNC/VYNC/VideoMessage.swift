@@ -33,7 +33,6 @@ class VideoMessage: NSManagedObject {
             initial, replyTo in
             let dict = replyTo as NSDictionary
             let id = dict.valueForKey("replyToId") as NSNumber
-            println(id)
             var messages = VideoMessage.syncer.all().filter("replyToId == %@", args: id).sortBy("id", ascending: false).exec()!
             if let lastMessage = messages.last as VideoMessage! {
                 if lastMessage.id == 0 {
@@ -52,11 +51,18 @@ class VideoMessage: NSManagedObject {
         return vyncs
     }
 
+    class func vyncArrays() -> [[Vync]] {
+        let allVyncsArray = allVyncs()
+        let liveVyncs = allVyncsArray.filter({vync in vync.isDead == false})
+        let deadVyncs = allVyncsArray.filter({vync in vync.isDead == true})
+        return [liveVyncs, deadVyncs]
+    }
+    
     class func deadVyncs()->[Vync]{
         return allVyncs().filter({vync in vync.isDead == true})
     }
 
-    class func asVyncs()->[Vync]{
+    class func activeVyncs()->[Vync]{
         return allVyncs().filter({vync in vync.isDead == false})
     }
     
@@ -93,7 +99,7 @@ class VideoMessage: NSManagedObject {
     
     class func saveNewVids(completion:(Void->Void) = {}) {
         // Only save vids that are active. Dead vyncs can be saved on demand.
-        let vids = asVyncs().reduce([VideoMessage](), combine: {
+        let vids = activeVyncs().reduce([VideoMessage](), combine: {
             array, vync in
             if !vync.isSaved {
                 return array + vync.messages
@@ -103,7 +109,8 @@ class VideoMessage: NSManagedObject {
         })
         if vids.count == 0 {
             completion()
+        } else {
+            saveTheseVids(vids, completion: completion)
         }
-        saveTheseVids(vids, completion: completion)
     }
 }

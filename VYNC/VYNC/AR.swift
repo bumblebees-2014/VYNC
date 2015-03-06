@@ -62,11 +62,9 @@ class AR<T : NSManagedObject> {
         return self
     }
     
-    func pluck(property:String) -> [AnyObject]? {
+    func pluck(properties:String...) -> [AnyObject]? {
         req.resultType = NSFetchRequestResultType.DictionaryResultType
-        let props = NSArray(array: [property])
-        
-        req.propertiesToFetch = props
+        req.propertiesToFetch = properties
         var error: NSError?
         if let results = db!.executeFetchRequest(req, error: &error) as [AnyObject]! {
             return results

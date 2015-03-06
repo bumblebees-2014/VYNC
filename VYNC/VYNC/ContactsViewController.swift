@@ -72,7 +72,7 @@ class ContactsViewController: UIViewController, UITableViewDelegate, UITableView
         
         if self.replyToId != 0 {
             println("making a reply \(replyToId)")
-            let vyncToUpdate = VideoMessage.asVyncs().filter({vync in vync.replyToId == self.replyToId})[0]
+            let vyncToUpdate = VideoMessage.allVyncs().filter({vync in vync.replyToId == self.replyToId})[0]
 
             var newMessage = VideoMessage.syncer.newObj()
             newMessage.id = 0

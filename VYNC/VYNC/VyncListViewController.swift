@@ -88,8 +88,9 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func updateView() {
-        self.vyncs = VideoMessage.asVyncs()
-        self.deadVyncs = VideoMessage.deadVyncs()
+        let vyncArrays = VideoMessage.vyncArrays()
+        self.vyncs = vyncArrays[0]
+        self.deadVyncs = vyncArrays[1]
         self.vyncTable.reloadData()
         self.vyncTable.setNeedsDisplay()
     }
