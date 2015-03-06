@@ -11,7 +11,8 @@ import UIKit
 
 class ContactsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UISearchBarDelegate, UISearchDisplayDelegate {
     
-    var contacts = User.syncer.all().filter("isMe == nil").exec()!
+    var contacts = User.syncer.all().filter("isMe == nil && facebookObjectId != nil").exec()!
+//    var friends =
     var filteredUsers = [User]()
     var replyToId : Int = 0
     var vyncTitle : String?
@@ -20,6 +21,10 @@ class ContactsViewController: UIViewController, UITableViewDelegate, UITableView
     @IBOutlet weak var searchBar: UISearchBar!
     
     override func viewDidLoad() {
+        for contact in contacts {
+            println(contact.facebookObjectId)
+        }
+        
         super.viewDidLoad()
         contactsList.reloadData()
         contactsList.setNeedsDisplay()
@@ -37,20 +42,14 @@ class ContactsViewController: UIViewController, UITableViewDelegate, UITableView
     
     // UITableViewDataSource requirements
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell: UITableViewCell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: "test")
-        
-        cell.imageView?.image = UIImage(named: "envelope")
-        
+        let cell = tableView.dequeueReusableCellWithIdentifier("ContactCell", forIndexPath: indexPath) as ContactCell
         var user : User
-        
         if tableView == self.searchDisplayController!.searchResultsTableView {
             user = filteredUsers[indexPath.row]
         } else {
             user = contacts[indexPath.row] as User
         }
-        
-        cell.textLabel?.text = "\(user.username)"
-        
+        cell.setupContact(user)
         return cell
     }
     
