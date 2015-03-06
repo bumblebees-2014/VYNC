@@ -264,7 +264,7 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
                 // In case it was single tapped before
                 cell.subTitle.textColor = UIColor.clearColor()
                 cell.titleLabel.transform = CGAffineTransformMakeTranslation(0, 0)
-                cell.titleLabel.text = "Users on this vync:\n" + array[indexPath.row].usersList
+                cell.titleLabel.text = array[indexPath.row].usersList
                 vyncTable.beginUpdates()
                 vyncTable.endUpdates()
             } else {

@@ -87,11 +87,15 @@ struct Vync {
     }
     
     var usersList: String {
-        let userNames = self.messages.map({
-            message in
-            "\(self.findUsername(message.senderId as Int))"
-        })
-        return ("\n").join(userNames)
+        if waitingOnYou && !isDead {
+            return "Forward to see who is on this VYNC"
+        } else {
+            let userNames = self.messages.map({
+                message in
+                "\(self.findUsername(message.senderId as Int))"
+            })
+            return "Users on this vync:\n" + ("\n").join(userNames)
+        }
     }
     
     func videoItems()->[AVPlayerItem]{
@@ -130,7 +134,7 @@ struct Vync {
     
     func findUsername(userId:Int)->String{
         if let user = User.syncer.all().find(userId) as User! {
-            return user.username
+            return user.isMe == 1 ? "You" : user.username
         } else {
             return "Fail :("
         }
