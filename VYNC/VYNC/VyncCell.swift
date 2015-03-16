@@ -44,11 +44,9 @@ class VyncCell: UITableViewCell, UIGestureRecognizerDelegate {
     
     func setVyncData(vync:Vync) {
         //  Set Title and Length Labels
-
         titleLabel.text = vync.title
         lengthLabel.text = String(vync.size)
         lengthLabel.textColor = UIColor.blackColor()
-        
         //   New vyncs get special color and gesture
         if vync.isDead {
             statusLogo.textColor = UIColor.blackColor()
@@ -56,13 +54,13 @@ class VyncCell: UITableViewCell, UIGestureRecognizerDelegate {
             lengthLabel.textColor = UIColor.whiteColor()
             subTitle.text = "\(vync.date) - Swipe to Delete"
         } else if vync.waitingOnYou {
-            statusLogo.textColor = UIColor(netHex:0xFFB5C9)
-            lengthLabel.backgroundColor = UIColor(netHex:0xFFB5C9)
+            statusLogo.textColor = UIColor.VPink()
+            lengthLabel.backgroundColor = UIColor.VPink()
             subTitle.text = "\(vync.date) - Swipe to Reply"
         } else {
             subTitle.text = "\(vync.date) - Hold to Play"
-            statusLogo.textColor = UIColor(netHex:0x7FF2FF)
-            lengthLabel.backgroundColor = UIColor(netHex:0x7FF2FF)
+            statusLogo.textColor = UIColor.VTeal()
+            lengthLabel.backgroundColor = UIColor.VTeal()
         }
         // Unwatched vyncs get a flame
         if vync.unwatched {
@@ -79,10 +77,13 @@ class VyncCell: UITableViewCell, UIGestureRecognizerDelegate {
             lengthLabel.layer.borderColor = UIColor.redColor().CGColor
         } else if vync.isSaved == false {
             statusLogo.textColor = UIColor.orangeColor()
+            lengthLabel.layer.borderColor = UIColor.orangeColor().CGColor
             subTitle.textColor = UIColor.orangeColor()
             titleLabel.transform = CGAffineTransformMakeTranslation(0, -10)
             subTitle.text = "Tap to download"
         } else {
+            titleLabel.transform = CGAffineTransformMakeTranslation(0, 0)
+            subTitle.textColor = UIColor.clearColor()
             contentView.layer.borderWidth = 0.0
             lengthLabel.layer.borderWidth = 0.0
         }

@@ -23,11 +23,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch
-        FBLoginView.self
-        FBProfilePictureView.self
         Fabric.with([Crashlytics()])
         application.setStatusBarStyle(UIStatusBarStyle.BlackOpaque, animated: false)
-        if signedUp() == false {
+        if User.signedUp() == false {
             self.window = UIWindow()
             self.window?.frame = UIScreen.mainScreen().bounds
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -36,12 +34,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.window?.makeKeyAndVisible()
 
         } else {
+            let readPermissions = ["public_profile", "email", "user_friends"]
+            FBSession.openActiveSessionWithReadPermissions(readPermissions, allowLoginUI: false, completionHandler: {
+                (session: FBSession!, state: FBSessionState, error: NSError!) -> Void in
+                if state == FBSessionState.Open {
+                    println("Logged In")
+                        FBRequestConnection.startForMyFriendsWithCompletionHandler({
+                        (connection, result, error: NSError!) -> Void in
+                        if error == nil {
+                            if let resultDict = result as? NSDictionary {
+                                let friends = resultDict.valueForKey("data") as [NSDictionary]
+                                for friend in friends {
+                                    if let id = friend.valueForKey("id") as? String {
+                                        if let matches = User.syncer.all().filter("facebookObjectId == %@ AND isMe != 2", args: id).exec() {
+                                            if matches.count > 0 {
+                                                let match = matches[0] as User!
+                                                match.isMe = 2
+                                                println("Matched!")
+                                                User.syncer.save()
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    })
+                }
+            })
             application.registerForRemoteNotifications()
             VideoMessage.syncer.sync()
-//            VideoMessage.saveNewVids()
+            VideoMessage.saveNewVids()
             User.syncer.sync()
         }
-
         return true
     }
 
@@ -56,7 +80,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             .stringByTrimmingCharactersInSet( characterSet )
             .stringByReplacingOccurrencesOfString( " ", withString: "" ) as String
         var request = HTTPTask()
-        request.PUT(host+"/users/" + myFacebookId(),
+        request.PUT(host+"/users/" + User.myFacebookId(),
             parameters: ["device_token": deviceToken],
             success: {(response: HTTPResponse) in
                 if let data = response.responseObject as? NSData {

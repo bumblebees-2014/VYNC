@@ -93,7 +93,7 @@ class Syncer<T: NSManagedObject> {
     func uploadWithFile(obj:T, completion: (Void -> Void) = {}) {
         let json = createJSONfromObject(obj)
         let video = obj as VideoMessage
-        let videoURL = NSURL.fileURLWithPath(docFolderToSaveFiles + "/" + video.videoId!)!
+        let videoURL = NSURL.fileURLWithPath(videoFolder + "/" + video.videoId!)!
         var request = HTTPTask()
         request.POST(url,
             parameters:
@@ -173,8 +173,10 @@ class Syncer<T: NSManagedObject> {
                     }
                 }
             },
-            failure: nil
-        )
+            failure: {(error: NSError, response: HTTPResponse?) in
+                println("download error: \(error)")
+                completion()
+        })
     }
 
     func addJSONToSql(decoderArray: JSONDecoder) {

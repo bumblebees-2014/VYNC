@@ -11,15 +11,15 @@ import UIKit
 
 
 class LoginPageViewController : UIViewController, UIPageViewControllerDataSource {
-    
+
+
     var pageViewController = UIPageViewController()
     var pageColors = [String]()
     var pageTitles = [String]()
     var pageImages = [String]()
 
     override func viewDidLoad() {
-        
-        
+        super.viewDidLoad()
         pageColors.append("Red")
         pageColors.append("Green")
         pageColors.append("Blue")
@@ -66,6 +66,7 @@ class LoginPageViewController : UIViewController, UIPageViewControllerDataSource
         return viewControllerAtIndex(index + 1)
     }
 
+    
     func presentationCountForPageViewController(pageViewController: UIPageViewController) -> Int {
         return pageColors.count
     }

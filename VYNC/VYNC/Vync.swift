@@ -21,15 +21,15 @@ struct Vync {
         return self.messages.first!.id == 0
     }
     var waitingOnYou: Bool {
-        if let mostRecentRecipient = self.messages.first {
-            return myUserId() == mostRecentRecipient.recipientId
+        if let mostRecentRecipient = self.messages.first?.recipientId {
+            return User.myUserId() == mostRecentRecipient
         } else {
             return false
         }
     }
     
     var isSaved: Bool {
-        return messages.filter({video in video.saved == 0}).count == 0
+        return messages.filter({video in video.saved == 1}).count == messages.count
     }
     
     var unwatched: Bool {
@@ -56,6 +56,7 @@ struct Vync {
                 return "Infinity years ago"
             }
         } else {
+            
             return "Just now"
         }
     }
@@ -87,25 +88,33 @@ struct Vync {
     }
     
     var usersList: String {
-        let userNames = self.messages.map({
-            message in
-            "\(self.findUsername(message.senderId as Int))"
-        })
-        return ("\n").join(userNames)
+        if waitingOnYou && !isDead {
+            return "Forward to see who is on this VYNC"
+        } else {
+            let userNames = self.messages.map({
+                message in
+                "\(self.findUsername(message.senderId as Int))"
+            })
+            return "Users on this vync:\n" + ("\n").join(userNames)
+        }
     }
     
     func videoItems()->[AVPlayerItem]{
-        if waitingOnYou {
+        if waitingOnYou && !isDead {
             let firstMessage = self.messages.first!
-            let firstMessageUrl = NSURL.fileURLWithPath(docFolderToSaveFiles + "/" + firstMessage.videoId!) as NSURL!
+            let firstMessageUrl = NSURL.fileURLWithPath(videoFolder + "/" + firstMessage.videoId!) as NSURL!
             let firstItem = AVPlayerItem(URL: firstMessageUrl)
-            let standinItem = AVPlayerItem(URL: standin)
+
+            let standinPath = NSBundle.mainBundle().pathForResource("VYNC", ofType:"mov")!
+            let standinURL = NSURL.fileURLWithPath(standinPath)
+            let standinItem = AVPlayerItem(URL: standinURL)
+            
             return [firstItem, standinItem]
             
         } else {
             return self.messages.map({
                 message in
-                AVPlayerItem(URL: (NSURL.fileURLWithPath(docFolderToSaveFiles + "/" + message.videoId!) as NSURL!))
+                AVPlayerItem(URL: (NSURL.fileURLWithPath(videoFolder + "/" + message.videoId!) as NSURL!))
             })
         }
     }
@@ -126,7 +135,7 @@ struct Vync {
     
     func findUsername(userId:Int)->String{
         if let user = User.syncer.all().find(userId) as User! {
-            return user.username
+            return user.isMe == 1 ? "You" : user.username
         } else {
             return "Fail :("
         }
@@ -140,7 +149,7 @@ struct Vync {
     func delete() {
         let fm = NSFileManager()
         for message in self.messages {
-            let localUrlString = "\(docFolderToSaveFiles)/\(message.videoId!)"
+            let localUrlString = videoFolder + "/" + message.videoId!
             fm.removeItemAtPath(localUrlString, error: nil)
             VideoMessage.syncer.delete(message)
         }

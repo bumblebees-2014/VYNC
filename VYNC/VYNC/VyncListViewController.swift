@@ -19,9 +19,9 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
     @IBOutlet weak var cameraButton: UIBarButtonItem!
     
     var refreshControl:UIRefreshControl!
-    var vyncs = VideoMessage.asVyncs()
-    var deadVyncs = VideoMessage.deadVyncs()
-    var lastPlayed : Int? = nil
+    var vyncs = [Vync]()
+    var deadVyncs = [Vync]()
+    var lastPlayed : NSIndexPath?
     var videoLayer = VyncPlayerLayer()
     
     override func viewDidLoad() {
@@ -35,7 +35,6 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
         
         // Sync New Videos
         VideoMessage.syncer.uploadNew() {done in
-            self.updateView()
             VideoMessage.syncer.downloadNew() {done in
                 self.updateView()
             }
@@ -44,12 +43,11 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
     
     func setupButtons(){
         // Set the font of nav bar title
-        let color = UIColor(netHex:0x73A1FF)
-        let font = [NSFontAttributeName: UIFont(name: "Egypt 22", size: 50)!, NSForegroundColorAttributeName: color]
+
+        let font = [NSFontAttributeName: UIFont.VEgypt(), NSForegroundColorAttributeName: UIColor.VBlue()]
         self.navigationController!.navigationBar.titleTextAttributes = font
         // Set the font of nav bar item
-        let buttonColor = UIColor(netHex:0x7FF2FF)
-        let buttonFont = [NSFontAttributeName: UIFont(name: "flaticon", size: 28)!, NSForegroundColorAttributeName: buttonColor]
+        let buttonFont = [NSFontAttributeName: UIFont(name: "flaticon", size: 28)!, NSForegroundColorAttributeName: UIColor.VTeal()]
         showStatsButton.setTitleTextAttributes(buttonFont, forState: .Normal)
         showStatsButton.title = "\u{e004}"
         cameraButton.setTitleTextAttributes(buttonFont, forState: .Normal)
@@ -64,6 +62,7 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        self.lastPlayed = nil
         UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: .None)
         updateView()
     }
@@ -77,6 +76,7 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
     
     @IBAction func reloadVyncs() {
         self.refreshControl.beginRefreshing()
+        self.lastPlayed = nil
         VideoMessage.syncer.uploadNew() {done in
             VideoMessage.syncer.downloadNew() {done in
                 VideoMessage.saveNewVids() {done in
@@ -89,8 +89,9 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func updateView() {
-        self.vyncs = VideoMessage.asVyncs()
-        self.deadVyncs = VideoMessage.deadVyncs()
+        let vyncArrays = VideoMessage.vyncArrays()
+        self.vyncs = vyncArrays[0]
+        self.deadVyncs = vyncArrays[1]
         self.vyncTable.reloadData()
         self.vyncTable.setNeedsDisplay()
     }
@@ -161,7 +162,7 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
                 title: "FORWARD",
                 handler: replyClosure
             )
-            reply.backgroundColor = UIColor(netHex: 0xFFB5C9)
+            reply.backgroundColor = UIColor.VPink()
             return [reply]
         } else {
             let delete = UITableViewRowAction(
@@ -171,6 +172,7 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
                     done in
                     self.deadVyncs[indexPath.row].delete()
                     self.deadVyncs.removeAtIndex(indexPath.row)
+                    self.lastPlayed = nil;
                     self.vyncTable.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic
                     )
                 }
@@ -206,7 +208,7 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
                 let index = indexPath.row as Int
                 let vync = array[index]
                 if vync.isSaved {
-                    if index != self.lastPlayed {
+                    if indexPath != self.lastPlayed {
                         self.videoLayer.player = nil
                         let items = array[index].videoItems()
                         var loopPlayer = AVQueueLoopPlayer(items: items)
@@ -215,7 +217,7 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
                         loopPlayer.layer = self.videoLayer
                         vync.markAsWatched()
                         updateView()
-                        self.lastPlayed = index
+                        self.lastPlayed = indexPath
                     }
                     self.navigationController?.view.layer.addSublayer(self.videoLayer)
                     self.videoLayer.playVideos()
@@ -263,7 +265,7 @@ class VyncListViewController: UIViewController, UITableViewDelegate, UITableView
                 // In case it was single tapped before
                 cell.subTitle.textColor = UIColor.clearColor()
                 cell.titleLabel.transform = CGAffineTransformMakeTranslation(0, 0)
-                cell.titleLabel.text = "Users on this vync:\n" + array[indexPath.row].usersList
+                cell.titleLabel.text = array[indexPath.row].usersList
                 vyncTable.beginUpdates()
                 vyncTable.endUpdates()
             } else {

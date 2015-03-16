@@ -20,7 +20,38 @@ class User: NSManagedObject {
     @NSManaged var id: NSNumber
     @NSManaged var email: String
     @NSManaged var facebookObjectId: String
-//  Using like a boolean: 1=true 0=false
+//  Using like an enum: 2=friend 1=me 0=unconnected
     @NSManaged var isMe :NSNumber
+
     
+    class func signedUp()->Bool{
+        if let user = User.syncer.all().filter("isMe == %@", args: 1).exec()?.first as User! {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    class func myUserId()->Int?{
+        if let me = User.syncer.all().filter("isMe == %@", args: 1).exec()!.first as User! {
+            return me.id as? Int
+            
+        } else {
+            return nil
+        }
+    }
+    
+    class func me()->User{
+        return User.syncer.all().filter("isMe == %@", args: 1).exec()!.first as User!
+    }
+    
+    class func myFacebookId()->String{
+        if let me = User.syncer.all().filter("isMe == %@", args: 1).exec()!.first as User! {
+            return me.facebookObjectId as String
+            
+        } else {
+            return ""
+        }
+        
+    }
 }
