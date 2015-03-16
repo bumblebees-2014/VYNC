@@ -173,8 +173,10 @@ class Syncer<T: NSManagedObject> {
                     }
                 }
             },
-            failure: nil
-        )
+            failure: {(error: NSError, response: HTTPResponse?) in
+                println("download error: \(error)")
+                completion()
+        })
     }
 
     func addJSONToSql(decoderArray: JSONDecoder) {
