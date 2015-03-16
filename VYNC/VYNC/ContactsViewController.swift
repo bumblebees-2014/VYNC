@@ -11,8 +11,9 @@ import UIKit
 
 class ContactsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UISearchBarDelegate, UISearchDisplayDelegate {
     
-    var contacts = User.syncer.all().filter("isMe == nil && facebookObjectId != nil").exec()!
-//    var friends =
+    var contacts = User.syncer.all().filter("isMe == 2 && facebookObjectId != nil").exec()!
+    var otherUsers = User.syncer.all().filter("isMe == nil && facebookObjectId != nil").exec()!
+    
     var filteredUsers = [User]()
     var replyToId : Int = 0
     var vyncTitle : String?
@@ -21,11 +22,10 @@ class ContactsViewController: UIViewController, UITableViewDelegate, UITableView
     @IBOutlet weak var searchBar: UISearchBar!
     
     override func viewDidLoad() {
-        for contact in contacts {
-            println(contact.facebookObjectId)
-        }
-        
         super.viewDidLoad()
+        self.searchDisplayController!.searchResultsTableView.registerClass(ContactCell.self, forCellReuseIdentifier: "ContactCell")
+        self.contactsList.rowHeight = UITableViewAutomaticDimension
+        self.searchDisplayController?.searchResultsTableView.rowHeight = UITableViewAutomaticDimension
         contactsList.reloadData()
         contactsList.setNeedsDisplay()
     }
@@ -42,22 +42,54 @@ class ContactsViewController: UIViewController, UITableViewDelegate, UITableView
     
     // UITableViewDataSource requirements
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("ContactCell", forIndexPath: indexPath) as ContactCell
+        var cell : ContactCell
         var user : User
         if tableView == self.searchDisplayController!.searchResultsTableView {
+            cell = self.contactsList.dequeueReusableCellWithIdentifier("ContactCell") as ContactCell
             user = filteredUsers[indexPath.row]
         } else {
-            user = contacts[indexPath.row] as User
+            cell = tableView.dequeueReusableCellWithIdentifier("ContactCell", forIndexPath: indexPath) as ContactCell
+            if indexPath.section == 0 {
+                user = contacts[indexPath.row] as User
+            } else {
+                user = otherUsers[indexPath.row] as User
+            }
+
         }
         cell.setupContact(user)
         return cell
+    }
+    
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        if tableView == self.searchDisplayController!.searchResultsTableView {
+            return 1
+        } else {
+            return 2
+        }
+    }
+    
+    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if tableView == self.searchDisplayController!.searchResultsTableView {
+            return "Matches"
+        } else {
+            if(section == 0) {
+                return "Friends"
+            } else {
+                return "Other Users"
+            }
+        }
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == self.searchDisplayController!.searchResultsTableView {
             return filteredUsers.count
         } else {
-            return contacts.count
+            if section == 0 {
+               return contacts.count
+            } else {
+               return otherUsers.count
+            }
+
         }
     }
     
@@ -99,7 +131,8 @@ class ContactsViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func filterContentForSearchText(searchText: String, scope: String = "All") {
-        self.filteredUsers = self.contacts.filter({( user : User) -> Bool in
+        let allUsers = contacts + otherUsers
+        self.filteredUsers = allUsers.filter({( user : User) -> Bool in
             var nameMatch = (scope == "All") || (user.username == scope)
             var stringMatch = user.username.lowercaseString.rangeOfString(searchText.lowercaseString)
             return nameMatch && (stringMatch != nil)

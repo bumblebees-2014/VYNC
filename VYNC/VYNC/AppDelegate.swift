@@ -39,19 +39,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 (session: FBSession!, state: FBSessionState, error: NSError!) -> Void in
                 if state == FBSessionState.Open {
                     println("Logged In")
-
-                    FBRequestConnection.startForMyFriendsWithCompletionHandler({
+                        FBRequestConnection.startForMyFriendsWithCompletionHandler({
                         (connection, result, error: NSError!) -> Void in
                         if error == nil {
                             if let resultDict = result as? NSDictionary {
                                 let friends = resultDict.valueForKey("data") as [NSDictionary]
-                                println(friends)
-                                // Using facebookObjectId as a marker for friends. May later implement separate isFriend boolean
                                 for friend in friends {
                                     if let id = friend.valueForKey("id") as? String {
-                                        if let match = User.syncer.all().findBy("facebookObjectId == %@", arg: id) as User! {
-                                            println("Matched!")
-                                            User.syncer.save()
+                                        if let matches = User.syncer.all().filter("facebookObjectId == %@ AND isMe != 2", args: id).exec() {
+                                            if matches.count > 0 {
+                                                let match = matches[0] as User!
+                                                match.isMe = 2
+                                                println("Matched!")
+                                                User.syncer.save()
+                                            }
                                         }
                                     }
                                 }
