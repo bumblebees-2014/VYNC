@@ -21,8 +21,8 @@ struct Vync {
         return self.messages.first!.id == 0
     }
     var waitingOnYou: Bool {
-        if let mostRecentRecipient = self.messages.first {
-            return User.myUserId() == mostRecentRecipient.recipientId
+        if let mostRecentRecipient = self.messages.first?.recipientId {
+            return User.myUserId() == mostRecentRecipient
         } else {
             return false
         }
@@ -56,6 +56,7 @@ struct Vync {
                 return "Infinity years ago"
             }
         } else {
+            
             return "Just now"
         }
     }
