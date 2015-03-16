@@ -44,11 +44,9 @@ class VyncCell: UITableViewCell, UIGestureRecognizerDelegate {
     
     func setVyncData(vync:Vync) {
         //  Set Title and Length Labels
-
         titleLabel.text = vync.title
         lengthLabel.text = String(vync.size)
         lengthLabel.textColor = UIColor.blackColor()
-        
         //   New vyncs get special color and gesture
         if vync.isDead {
             statusLogo.textColor = UIColor.blackColor()
@@ -79,6 +77,7 @@ class VyncCell: UITableViewCell, UIGestureRecognizerDelegate {
             lengthLabel.layer.borderColor = UIColor.redColor().CGColor
         } else if vync.isSaved == false {
             statusLogo.textColor = UIColor.orangeColor()
+            lengthLabel.layer.borderColor = UIColor.orangeColor().CGColor
             subTitle.textColor = UIColor.orangeColor()
             titleLabel.transform = CGAffineTransformMakeTranslation(0, -10)
             subTitle.text = "Tap to download"
