@@ -20,7 +20,7 @@ class User: NSManagedObject {
     @NSManaged var id: NSNumber
     @NSManaged var email: String
     @NSManaged var facebookObjectId: String
-//  Using like a boolean: 1=true 0=false
+//  Using like an enum: 2=friend 1=me 0=unconnected
     @NSManaged var isMe :NSNumber
 
     
