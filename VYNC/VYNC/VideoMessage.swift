@@ -76,12 +76,17 @@ class VideoMessage: NSManagedObject {
                 let cloudUrl = NSURL(string: s3Url + message.videoId!) as NSURL!
                 let localData = NSData(contentsOfURL: localUrl)
                 if localData?.length == nil {
-                        println("saving video to core data \(message.id)")
-                        let data = NSData(contentsOfURL: cloudUrl)
+                    println("saving video to core data \(message.id)")
+                    let data = NSData(contentsOfURL: cloudUrl)
+                    if data?.length != nil {
                         data?.writeToFile(localUrlString, atomically: true)
                         message.saved = 1
                         message.watched = 0
                         self.syncer.save()
+                    } else {
+                        println("no connection")
+                    }
+
                 } else {
                     println("already there")
                     message.saved = 1
